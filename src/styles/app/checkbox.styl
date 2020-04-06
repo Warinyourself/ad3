@@ -1,0 +1,30 @@
+.app-checkbox
+  width 40px
+  height 20px
+  position relative
+  border-radius 20px
+  background var(--color-bg-light)
+  border 1px solid var(--color-bg-dark)
+  transition .3s
+  &:hover
+    border 1px solid var(--color-active)
+    box-shadow 0 0 4px var(--color-active)
+    .app-checkbox__toggle
+      opacity 1
+
+
+.app-checkbox--active
+  .app-checkbox__toggle
+    transform translate(21px, -50%)
+    opacity .7
+
+.app-checkbox__toggle
+  width 16px
+  height 16px
+  top 50%
+  position absolute
+  border-radius 50%
+  background var(--color-active)
+  opacity .4
+  transform translate(2px, -50%)
+  transition .3s 
