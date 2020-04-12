@@ -2,6 +2,8 @@ import { Component, Prop, Vue } from 'vue-property-decorator'
 import { CreateElement, VNode } from 'vue/types'
 
 import * as d3 from 'd3'
+import { generateGrid } from '@/utils/grid'
+import { generateAxis } from '@/utils/axis'
 
 @Component({
   name: 'AreaWidget'
@@ -33,39 +35,31 @@ export default class extends Vue {
 
     const data = this.generateChartData()
 
-    const x = d3.scaleLinear()
-      .domain([0, data.length - 1])
-      .range([margin.left, width - margin.right])
+    const [x, xAxis] = generateAxis({
+      domain: [0, data.length - 1],
+      range: [margin.left, width - margin.right],
+      ticks: data.length < 15 ? data.length : 10,
+      translate: `translate(0, ${height - margin.bottom})`
+    })
 
-    const xAxis = (g: any) => g
-      .attr('transform', `translate(0,${height - margin.bottom})`)
-      .call(
-        d3.axisBottom(x)
-          .ticks(data.length < 15 ? data.length : 10)
-          .tickPadding(6)
-      )
+    const [y, yAxis, yDomain] = generateAxis({
+      domain: d3.extent(data, d => d.value) as [number, number],
+      domainOffset: 0.2,
+      type: 'axisLeft',
+      range: [height - margin.bottom, margin.top],
+      ticks: data.length < 6 ? data.length : 6,
+      translate: `translate(${margin.left}, 0)`
+    })
 
-    const yDomain: [number, number] = d3.extent(data, d => d.value) as [number, number]
-    yDomain[0] = yDomain[0] - yDomain[1] * 0.2
-    yDomain[1] = yDomain[1] + yDomain[1] * 0.2
-
-    const y = d3.scaleLinear()
-      .domain(yDomain)
-      .range([height - margin.bottom, margin.top])
-
-    const yAxis = (g: any) => g
-      .attr('transform', `translate(${margin.left},0)`)
-      .call(
-        d3.axisLeft(y)
-          .ticks(data.length < 6 ? data.length : 6)
-          .tickPadding(6)
-      )
-
+    const grid = generateGrid({ width, height, margin, y, x })
     svg.append('g')
       .call(xAxis)
 
     svg.append('g')
       .call(yAxis)
+
+    svg.append('g')
+      .call(grid)
 
     const curve = d3.curveCardinal
     const path: any = d3.line()
@@ -91,10 +85,13 @@ export default class extends Vue {
       .attr('stop-color', 'var(--color-active)')
       .attr('stop-opacity', 1)
 
+    const isDark = true
+    const gradientColor = isDark ? 'back' : 'rgba(255,255,255,0)'
+
     mainGradient.append('stop')
       .attr('class', 'stop-right')
       .attr('offset', '1')
-      .attr('stop-color', 'black')
+      .attr('stop-color', gradientColor)
       .attr('stop-opacity', 0)
 
     svg.append('path')

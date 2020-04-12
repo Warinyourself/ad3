@@ -5,8 +5,10 @@ import { CreateElement, VNode } from 'vue/types'
 import ChartWidget from '@/components/block/widget/ChartWidget'
 import PieWidget from '@/components/block/widget/PieWidget'
 import AreaWidget from '@/components/block/widget/AreaWidget'
+import ChordWidget from '@/components/block/widget/ChordWidget'
 
 import { PageModule } from '@/store/page/PageModule'
+import { ThemeModule } from '@/store/theme/ThemeModule'
 
 let isDoubleClick: any = false
 
@@ -15,7 +17,8 @@ let isDoubleClick: any = false
   components: {
     ChartWidget,
     AreaWidget,
-    PieWidget
+    PieWidget,
+    ChordWidget
   }
 })
 export default class extends Vue {
@@ -26,6 +29,7 @@ export default class extends Vue {
     let child: VNode | string
     child = h('component', {
       is: this.block.component,
+      key: ThemeModule.theme,
       props: {
         settings: this.block
       }
