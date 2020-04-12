@@ -37,7 +37,13 @@ class Settings extends VuexModule implements SettingsState {
       id: UtilsModule.getUUID(),
       title: 'Area widget',
       component: 'AreaWidget',
-      size: [3, 1]
+      size: [2, 1]
+    },
+    {
+      id: UtilsModule.getUUID(),
+      title: 'Chord widget',
+      component: 'ChordWidget',
+      size: [2, 2]
     }
   ]
 }
