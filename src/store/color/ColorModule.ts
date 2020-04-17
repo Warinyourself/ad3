@@ -1,15 +1,13 @@
 import { Module, VuexModule, getModule, Action, Mutation } from 'vuex-module-decorators'
 import store from '@/store'
 
+import { TColorArray, IConvertOptions } from './ColorModels'
 import { ITheme, TColor } from '@/store/theme/ThemeModels'
 
 export type ColorState = {
   [key in TColor]: string
 }
 
-interface IConvertOptions {
-  view: string
-}
 @Module({ dynamic: true, store, name: 'color' })
 class Color extends VuexModule implements ColorState {
   active: string = ''
@@ -26,26 +24,26 @@ class Color extends VuexModule implements ColorState {
   }
 
   get bgDark() {
-    return this.changeHsl(this.convertToHsl(this.bg), 0, -0, -5)
+    return this.changeHsl(this.convertToHsl(this.bg) as string, 0, -0, -5)
   }
 
   get colorDarker() {
-    return this.changeHsl(this.convertToHsl(this.active), 0, -0, -10)
+    return this.changeHsl(this.convertToHsl(this.active) as string, 0, -0, -10)
   }
 
   get colorDarkest() {
-    return this.changeHsl(this.convertToHsl(this.active), 0, -0, -15)
+    return this.changeHsl(this.convertToHsl(this.active) as string, 0, -0, -15)
   }
 
   get convertToHsl() {
-    return (color: string, convertOptions: IConvertOptions) => {
+    return (color: string, convertOptions?: IConvertOptions) => {
       let type = color.slice(0, 3)
       if (type === 'rgb') {
-        return this.rgbToHsl(...this.fromBracketsToNumber(color))
+        return this.rgbToHsl(this.fromBracketsToNumber(color) as TColorArray, convertOptions)
       } else if (color[0] === '#') {
         const hexArray = this.hexToRgb(color)
 
-        return hexArray ? this.rgbToHsl(...hexArray) : 'notConverted'
+        return hexArray ? this.rgbToHsl(hexArray as TColorArray, convertOptions) : 'notConverted'
       } else {
         return color
       }
@@ -60,14 +58,14 @@ class Color extends VuexModule implements ColorState {
   }
 
   get fromBracketsToNumber() {
-    return (color: string): [number, number, number] => {
+    return (color: string): TColorArray => {
       let num = color.slice(color.indexOf('(') + 1).replace(')', '').split(',')
       return [parseInt(num[0]), parseInt(num[1]), parseInt(num[2])]
     }
   }
 
   get hexToRgb() {
-    return (color: string): [number, number, number] => {
+    return (color: string): TColorArray => {
       let result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(color)
       return result ? [
         parseInt(result[1], 16),
@@ -78,7 +76,8 @@ class Color extends VuexModule implements ColorState {
   }
 
   get rgbToHsl() {
-    return (r: number, g: number, b: number, convertOptions?: IConvertOptions): string | [number, number, number] => {
+    return (colorRGB: TColorArray, convertOptions?: IConvertOptions): string | TColorArray => {
+      let [r, g, b] = colorRGB
       const { view } = convertOptions || {}
       const isArray = view === 'array'
       r /= 255
@@ -86,14 +85,15 @@ class Color extends VuexModule implements ColorState {
       b /= 255
       let [max, min] = [Math.max(r, g, b), Math.min(r, g, b)]
 
-      let h: number
-      let s: number
-      let l: number = (max + min) / 2
+      let h = 0
+      let s = 0
+      let l = (max + min) / 2
 
-      const formatString = () => `hsl(${Math.round(h)}, ${Math.round(s * 100)}%, ${Math.round(l * 100)}%)`
+      const finalArray = (): TColorArray => [Math.round(h), Math.round(s * 100), Math.round(l * 100)]
+      const formatString = (hsl: TColorArray) => `hsl(${hsl[0]}, ${hsl[1]}%, ${hsl[2]}%)`
       if (max === min) {
         h = s = 0
-        return isArray ? [h, s, l] : formatString()
+        return isArray ? finalArray() : formatString(finalArray())
       }
 
       let d = (max - min)
@@ -104,7 +104,7 @@ class Color extends VuexModule implements ColorState {
         case b: h = ((r - g) / d + 4) * 60; break
       }
 
-      return formatString()
+      return isArray ? finalArray() : formatString(finalArray())
     }
   }
 
@@ -121,7 +121,7 @@ class Color extends VuexModule implements ColorState {
 
     const hue = ['dark', '', 'light']
     const changeColor = (color: string, hue: number) => {
-      return this.changeHsl(this.convertToHsl(color), 0, -0, hue)
+      return this.changeHsl(this.convertToHsl(color) as string, 0, -0, hue)
     }
     const hueStep = 5
     const hueStart = (hue.length - 2) * hueStep * -1

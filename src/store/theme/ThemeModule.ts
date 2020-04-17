@@ -2,8 +2,8 @@ import { Module, VuexModule, getModule, Mutation, Action } from 'vuex-module-dec
 import store from '@/store'
 
 import { ITheme } from './ThemeModels'
-
 import { ColorModule } from '@/store/color/ColorModule'
+import { TColorArray } from '@/store/color/ColorModels'
 
 export interface ThemeState {
   theme: String
@@ -35,7 +35,8 @@ class Theme extends VuexModule implements ThemeState {
   }
 
   get isDarkTheme() {
-    return ColorModule.convertToHsl(this.currentTheme.bg, { view: 'array' })
+    const HSL = ColorModule.convertToHsl(this.currentTheme.bg, { view: 'array' }) as TColorArray
+    return HSL[2] < 50
   }
 
   @Mutation
