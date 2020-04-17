@@ -5,6 +5,8 @@ import * as d3 from 'd3'
 import { generateGrid } from '@/utils/grid'
 import { generateAxis } from '@/utils/axis'
 
+import { ThemeModule } from '@/store/theme/ThemeModule'
+
 @Component({
   name: 'AreaWidget'
 })
@@ -85,8 +87,7 @@ export default class extends Vue {
       .attr('stop-color', 'var(--color-active)')
       .attr('stop-opacity', 1)
 
-    const isDark = true
-    const gradientColor = isDark ? 'back' : 'rgba(255,255,255,0)'
+    const gradientColor = ThemeModule.isDarkTheme ? 'black' : 'rgba(255,255,255,0)'
 
     mainGradient.append('stop')
       .attr('class', 'stop-right')
