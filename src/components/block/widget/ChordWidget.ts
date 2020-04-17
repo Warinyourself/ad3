@@ -70,7 +70,7 @@ export default class extends Vue {
       .append('g')
 
     console.log(ColorModule.active, 'active')
-    const colors = [ColorModule.active, '#ffaf98', '#ffe579', '#baf2a9', '#15bde8', '#b29de6']
+    const colors = [ColorModule.active, ColorModule.second, '#ffe579', '#baf2a9', '#15bde8', '#b29de6']
 
     const wrapper = svg.append('g')
       .attr('transform', 'translate(' + width / 2 + ',' + height / 2 + ') rotate(75)')

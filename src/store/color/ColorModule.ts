@@ -7,6 +7,9 @@ export type ColorState = {
   [key in TColor]: string
 }
 
+interface IConvertOptions {
+  view: string
+}
 @Module({ dynamic: true, store, name: 'color' })
 class Color extends VuexModule implements ColorState {
   active: string = ''
@@ -35,7 +38,7 @@ class Color extends VuexModule implements ColorState {
   }
 
   get convertToHsl() {
-    return (color: string) => {
+    return (color: string, convertOptions: IConvertOptions) => {
       let type = color.slice(0, 3)
       if (type === 'rgb') {
         return this.rgbToHsl(...this.fromBracketsToNumber(color))
@@ -75,7 +78,9 @@ class Color extends VuexModule implements ColorState {
   }
 
   get rgbToHsl() {
-    return (r: number, g: number, b: number): string => {
+    return (r: number, g: number, b: number, convertOptions?: IConvertOptions): string | [number, number, number] => {
+      const { view } = convertOptions || {}
+      const isArray = view === 'array'
       r /= 255
       g /= 255
       b /= 255
@@ -88,7 +93,7 @@ class Color extends VuexModule implements ColorState {
       const formatString = () => `hsl(${Math.round(h)}, ${Math.round(s * 100)}%, ${Math.round(l * 100)}%)`
       if (max === min) {
         h = s = 0
-        return formatString()
+        return isArray ? [h, s, l] : formatString()
       }
 
       let d = (max - min)

@@ -30,6 +30,14 @@ class Theme extends VuexModule implements ThemeState {
     }
   ]
 
+  get currentTheme() {
+    return this.themes.find(theme => theme.name === this.theme) || this.themes[0]
+  }
+
+  get isDarkTheme() {
+    return ColorModule.convertToHsl(this.currentTheme.bg, { view: 'array' })
+  }
+
   @Mutation
   SET_THEME_STATE<T extends this, P extends keyof this>({ key, value }: { key: P, value: T[P] }) {
     this[key] = value

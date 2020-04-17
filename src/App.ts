@@ -23,7 +23,7 @@ export default class extends Vue {
     return h('component', { is: this.layout + 'Layout', attrs: { id: 'app' } }, [h('router-view')])
   }
 
-  beforeMounte() {
+  beforeMount() {
     ThemeModule.updateTheme('dark')
   }
 }
