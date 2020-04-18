@@ -3,6 +3,9 @@ import { CreateElement, VNode } from 'vue/types'
 
 import * as d3 from 'd3'
 
+import { generateAxis } from '@/utils/axis'
+import { generateGrid } from '@/utils/grid'
+
 @Component({
   name: 'LineWidget'
 })
@@ -33,39 +36,28 @@ export default class extends Vue {
 
     const data = this.generateChartData()
 
-    const x = d3.scaleLinear()
-      .domain([0, data.length - 1])
-      .range([margin.left, width - margin.right])
+    const [x, xAxis] = generateAxis({
+      domain: [0, data.length - 1],
+      range: [margin.left, width - margin.right],
+      ticks: data.length < 15 ? data.length : 10,
+      translate: `translate(0, ${height - margin.bottom})`
+    })
 
-    const xAxis = (g: any) => g
-      .attr('transform', `translate(0,${height - margin.bottom})`)
-      .call(
-        d3.axisBottom(x)
-          .ticks(data.length < 15 ? data.length : 10)
-          .tickPadding(6)
-      )
+    const [y, yAxis, yDomain] = generateAxis({
+      domain: d3.extent(data, d => d.value) as [number, number],
+      domainOffset: 0.2,
+      type: 'axisLeft',
+      range: [height - margin.bottom, margin.top],
+      ticks: data.length < 6 ? data.length : 6,
+      translate: `translate(${margin.left}, 0)`
+    })
 
-    const yDomain: [number, number] = d3.extent(data, d => d.value) as [number, number]
-    yDomain[0] = yDomain[0] - yDomain[1] * 0.2
-    yDomain[1] = yDomain[1] + yDomain[1] * 0.2
+    const grid = generateGrid({ width, height, margin, y, x })
+    const callSvg = (func: (g: any) => any) => svg.append('g').call(func)
 
-    const y = d3.scaleLinear()
-      .domain(yDomain)
-      .range([height - margin.bottom, margin.top])
-
-    const yAxis = (g: any) => g
-      .attr('transform', `translate(${margin.left},0)`)
-      .call(
-        d3.axisLeft(y)
-          .ticks(data.length < 10 ? data.length : 10)
-          .tickPadding(6)
-      )
-
-    svg.append('g')
-      .call(xAxis)
-
-    svg.append('g')
-      .call(yAxis)
+    callSvg(xAxis)
+    callSvg(yAxis)
+    callSvg(grid)
 
     const path: any = d3.line()
       .x((_, i) => x(i))

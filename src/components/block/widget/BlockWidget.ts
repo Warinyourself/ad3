@@ -2,7 +2,7 @@ import { Component, Prop, Vue } from 'vue-property-decorator'
 import { IWidgetBlock } from '@/types'
 import { CreateElement, VNode } from 'vue/types'
 
-import ChartWidget from '@/components/block/widget/ChartWidget'
+import LineWidget from '@/components/block/widget/LineWidget'
 import PieWidget from '@/components/block/widget/PieWidget'
 import AreaWidget from '@/components/block/widget/AreaWidget'
 import ChordWidget from '@/components/block/widget/ChordWidget'
@@ -15,7 +15,7 @@ let isDoubleClick: any = false
 @Component({
   name: 'WidgetBlock',
   components: {
-    ChartWidget,
+    LineWidget,
     AreaWidget,
     PieWidget,
     ChordWidget
