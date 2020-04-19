@@ -27,7 +27,7 @@ export function generateAxis(axiosSettings: IAxisSettings): [d3.ScaleLinear<numb
         .ticks(ticks)
         .tickPadding(6)
     )
-    .call(g => g.selectAll('.domain, .tick line').remove())
+    .call((g: any) => g.selectAll('.domain, .tick line').remove())
 
   return [line, axis, domain]
 }
