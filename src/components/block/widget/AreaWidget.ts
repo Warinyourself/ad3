@@ -2,8 +2,8 @@ import { Component, Prop, Vue } from 'vue-property-decorator'
 import { CreateElement, VNode } from 'vue/types'
 
 import * as d3 from 'd3'
-import { generateGrid } from '@/utils/grid'
-import { generateAxis } from '@/utils/axis'
+import { generateGrid } from '@/utils/d3/grid'
+import { generateAxis } from '@/utils/d3/axis'
 
 import { ThemeModule } from '@/store/theme/ThemeModule'
 
@@ -54,14 +54,11 @@ export default class extends Vue {
     })
 
     const grid = generateGrid({ width, height, margin, y, x })
-    svg.append('g')
-      .call(xAxis)
+    const callSvg = (func: (g: any) => any) => svg.append('g').call(func)
 
-    svg.append('g')
-      .call(yAxis)
-
-    svg.append('g')
-      .call(grid)
+    callSvg(xAxis)
+    callSvg(yAxis)
+    callSvg(grid)
 
     const curve = d3.curveCardinal
     const path: any = d3.line()
