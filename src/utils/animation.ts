@@ -1,12 +1,12 @@
 interface IAminate {
   duration: number
   timing: (time: number) => number
-  draw: (progress: number) => null
+  draw: (progress: number) => void
   complete?: Function
 }
 
 export function animate(options: IAminate) {
-  var start = performance.now()
+  const start = performance.now()
 
   requestAnimationFrame(function animate(time) {
     let timeFraction = (time - start) / options.duration
@@ -16,7 +16,6 @@ export function animate(options: IAminate) {
 
     options.draw(progress)
 
-    console.log({ timeFraction, options })
     if (timeFraction < 1) {
       requestAnimationFrame(animate)
     } else if (timeFraction === 1) {
