@@ -37,7 +37,7 @@ class Settings extends VuexModule implements SettingsState {
       id: UtilsModule.getUUID(),
       title: 'Pie Amount',
       component: 'PieWidget',
-      size: [1, 1]
+      size: [2, 2]
     },
     {
       id: UtilsModule.getUUID(),

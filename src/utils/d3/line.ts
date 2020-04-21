@@ -115,7 +115,7 @@ export function initLinePosition() {
 
     if (oldPosition.x !== position.x) {
       oldPosition = position
-      console.log({ position })
+
       animate({
         duration: 400,
         timing: (time: number) => time,

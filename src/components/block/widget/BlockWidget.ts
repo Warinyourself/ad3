@@ -3,8 +3,9 @@ import { IWidgetBlock } from '@/types'
 import { CreateElement, VNode } from 'vue/types'
 
 import LineWidget from '@/components/block/widget/LineWidget'
-import PieWidget from '@/components/block/widget/PieWidget'
 import AreaWidget from '@/components/block/widget/AreaWidget'
+import ArcWidget from '@/components/block/widget/ArcWidget'
+import PieWidget from '@/components/block/widget/PieWidget'
 import ChordWidget from '@/components/block/widget/ChordWidget'
 
 import { PageModule } from '@/store/page/PageModule'
@@ -18,6 +19,7 @@ let isDoubleClick: any = false
     LineWidget,
     AreaWidget,
     PieWidget,
+    ArcWidget,
     ChordWidget
   }
 })
