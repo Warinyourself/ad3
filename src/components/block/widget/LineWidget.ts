@@ -85,11 +85,11 @@ export default class extends Vue {
 
     const lineX = generateLine({
       position: [margin.left, margin.left, margin.top, height - margin.bottom],
-      attrs: [['id', 'tooltip-line-x'], ['stroke', 'var(--color-active)'], ['stroke-opacity', '0.6']]
+      attrs: [['id', 'tooltip-line-x'], ['stroke', 'var(--color-active)'], ['stroke-opacity', '0.6'], ['opacity', '0']]
     })
     const lineY = generateLine({
       position: [margin.left, width - margin.right, margin.top, margin.top],
-      attrs: [['id', 'tooltip-line-y'], ['stroke', 'var(--color-active)'], ['stroke-opacity', '0.6']]
+      attrs: [['id', 'tooltip-line-y'], ['stroke', 'var(--color-active)'], ['stroke-opacity', '0.6'], ['opacity', '0']]
     })
 
     svg.call(lineX)
@@ -128,7 +128,7 @@ export default class extends Vue {
         duration: 200,
         timing: (n) => n,
         draw: (progress) => {
-          d3.selectAll('#pointer, #tooltip-line-x, #tooltip-line-y').attr('opacity', 1 * progress)
+          svg.selectAll('#pointer, #tooltip-line-x, #tooltip-line-y').attr('opacity', 1 * progress)
         }
       })
     }).on('mousemove', () => {
@@ -138,17 +138,18 @@ export default class extends Vue {
       updateLinePosition({
         animationCallback: (progress: number) => console.log({ progress }),
         position,
-        duration: 400
+        duration: 400,
+        svg
       })
 
-      d3.select('#pointer')
+      svg.select('#pointer')
         .attr('transform', `translate(${position.x}, ${position.y})`)
     }).on('mouseleave', () => {
       animate({
         duration: 200,
         timing: (n) => n,
         draw: (progress) => {
-          d3.selectAll('#pointer, #tooltip-line-x, #tooltip-line-y').attr('opacity', 1 - progress)
+          svg.selectAll('#pointer, #tooltip-line-x, #tooltip-line-y').attr('opacity', 1 - progress)
         }
       })
     })

@@ -33,6 +33,7 @@ interface ILinePosition {
 interface IUpdateLinePosition {
   animationCallback: (progress: number) => any,
   position: ILinePosition,
+  svg: any
   duration: number
 }
 
@@ -110,24 +111,25 @@ export function initLinePosition() {
   let oldPosition: ILinePosition = { x: 0, y: 0 }
 
   return (update: IUpdateLinePosition) => {
-    const { position } = update
+    const { position, svg } = update
 
     if (oldPosition.x !== position.x) {
       oldPosition = position
+      console.log({ position })
       animate({
         duration: 400,
         timing: (time: number) => time,
         draw: (progress: number) => {
-          generateTransition('x', progress, position)
-          generateTransition('y', progress, position)
+          generateTransition('x', progress, position, svg)
+          generateTransition('y', progress, position, svg)
         }
       })
     }
   }
 }
 
-const generateTransition = (path: 'x' | 'y', progress: number, position: ILinePosition) => {
-  const line = d3.select(`#tooltip-line-${path}`)
+const generateTransition = (path: 'x' | 'y', progress: number, position: ILinePosition, svg: any) => {
+  const line = svg.select(`#tooltip-line-${path}`)
   const start = parseInt(line.attr(`${path}1`)) || 0
   line
     .attr(`${path}1`, start + ((position[path] - start) * progress))
