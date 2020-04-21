@@ -12,8 +12,12 @@ interface IGridSettings {
   margin: IMargin
   width: number
   height: number
-  y: d3.ScaleLinear<number, number>
-  x: d3.ScaleLinear<number, number>
+  y?: d3.ScaleLinear<number, number>
+  x?: d3.ScaleLinear<number, number>
+  yLines?: number
+  xLines?: number
+  opacity?: number
+  color?: string
 }
 
 interface ILineSettings {
@@ -33,27 +37,51 @@ interface IUpdateLinePosition {
 }
 
 export function generateGrid(gridSettings: IGridSettings) {
-  const { margin, height, width, x, y } = gridSettings
+  const { margin, height, width, x, y, opacity, color, xLines, yLines } = gridSettings
 
-  const grid = (g: any) => g
-    .attr('stroke', 'currentColor')
-    .attr('stroke-opacity', 0.1)
-    .call(g => g.append('g')
-      .selectAll('line')
-      .data(x.ticks())
-      .join('line')
-      .attr('x1', (d: number) => 0.5 + x(d))
-      .attr('x2', (d: number) => 0.5 + x(d))
-      .attr('y1', margin.top)
-      .attr('y2', height - margin.bottom))
-    .call(g => g.append('g')
-      .selectAll('line')
-      .data(y.ticks())
-      .join('line')
-      .attr('y1', (d: number) => 0.5 + y(d))
-      .attr('y2', (d: number) => 0.5 + y(d))
-      .attr('x1', margin.left)
-      .attr('x2', width - margin.right))
+  const grid = (g: any) => {
+    const grid = g
+      .attr('stroke', color || 'currentColor')
+      .attr('stroke-opacity', opacity || 0.1)
+
+    const generateLines = (axis: d3.ScaleLinear<number, number>, amount?: number) => {
+      let linesArray = axis.ticks()
+
+      if (amount) {
+        const max = axis.ticks().pop() as number
+        const avg = max / amount
+        linesArray = Array.from(Array(max / avg)).map((_, index) => (index + 1) * avg)
+      }
+
+      return linesArray
+    }
+
+    if (x) {
+      let xLinesArray = generateLines(x, xLines)
+
+      grid.call(g => g.append('g')
+        .selectAll('line')
+        .data(xLinesArray)
+        .join('line')
+        .attr('x1', (d: number) => 0.5 + x(d))
+        .attr('x2', (d: number) => 0.5 + x(d))
+        .attr('y1', margin.top)
+        .attr('y2', height - margin.bottom))
+    }
+
+    if (y) {
+      let yLinesArray = generateLines(y, yLines)
+
+      grid.call(g => g.append('g')
+        .selectAll('line')
+        .data(yLinesArray)
+        .join('line')
+        .attr('y1', (d: number) => 0.5 + y(d))
+        .attr('y2', (d: number) => 0.5 + y(d))
+        .attr('x1', margin.left)
+        .attr('x2', width - margin.right))
+    }
+  }
 
   return grid
 }

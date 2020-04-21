@@ -40,22 +40,23 @@ export default class extends Vue {
     const data = this.generateChartData()
 
     const [x, xAxis] = generateAxis({
+      ticks: data.length < 15 ? data.length : 10,
       domain: [0, data.length - 1],
       range: [margin.left, width - margin.right],
-      ticks: data.length < 15 ? data.length : 10,
       translate: `translate(0, ${height - margin.bottom})`
     })
 
+    const yTicks = data.length < 6 ? data.length : 6
     const [y, yAxis] = generateAxis({
+      type: 'axisLeft',
+      ticks: yTicks,
       domain: d3.extent(data, d => d.value) as [number, number],
       domainOffset: 0.2,
-      type: 'axisLeft',
       range: [height - margin.bottom, margin.top],
-      ticks: data.length < 6 ? data.length : 6,
       translate: `translate(${margin.left}, 0)`
     })
 
-    const grid = generateGrid({ width, height, margin, y, x })
+    const grid = generateGrid({ width, height, margin, y, yLines: yTicks })
     const callSvg = (func: (g: any) => any) => svg.append('g').call(func)
 
     callSvg(xAxis)
