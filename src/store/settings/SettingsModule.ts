@@ -12,8 +12,8 @@ class Settings extends VuexModule implements SettingsState {
   widgetBlocks = [
     {
       id: UtilsModule.getUUID(),
-      title: 'Pie Amount',
-      component: 'PieWidget',
+      title: 'Arc Amount',
+      component: 'ArcWidget',
       size: [1, 1],
       chartSettings: {
         value: {
@@ -32,6 +32,12 @@ class Settings extends VuexModule implements SettingsState {
       title: 'Chart widget',
       component: 'LineWidget',
       size: [3, 1]
+    },
+    {
+      id: UtilsModule.getUUID(),
+      title: 'Pie Amount',
+      component: 'PieWidget',
+      size: [1, 1]
     },
     {
       id: UtilsModule.getUUID(),
