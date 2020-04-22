@@ -41,6 +41,12 @@ class Settings extends VuexModule implements SettingsState {
     },
     {
       id: UtilsModule.getUUID(),
+      title: 'Radar Amount',
+      component: 'RadarWidget',
+      size: [2, 2]
+    },
+    {
+      id: UtilsModule.getUUID(),
       title: 'Area widget',
       component: 'AreaWidget',
       size: [2, 1]
