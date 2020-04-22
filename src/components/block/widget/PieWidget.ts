@@ -1,5 +1,4 @@
 import { Component, Prop, Vue } from 'vue-property-decorator'
-import { IWidgetBlock } from '@/types'
 
 import { CreateElement, VNode } from 'vue/types'
 import * as d3 from 'd3'
@@ -7,7 +6,7 @@ import * as d3 from 'd3'
 @Component({
   name: 'PieWidget'
 })
-export default class PieWidget extends Vue {
+export default class extends Vue {
   render(h: CreateElement): VNode {
     return h('svg', { ref: 'svgChart', class: ['chart-pie'] })
   }
@@ -50,7 +49,11 @@ export default class PieWidget extends Vue {
 
     const innerRaiusWidth = 60
 
-    const pie = d3.pie().value((d: any) => d.amountInUsd)
+    const pie = d3.pie()
+      .value((d: any) => d.amountInUsd)
+      // .startAngle(-0.5 * Math.PI)
+      // .endAngle(0.5 * Math.PI)
+
     let arcs: any = pie(data as any)
     const arc = d3.arc()
       .outerRadius(radius)

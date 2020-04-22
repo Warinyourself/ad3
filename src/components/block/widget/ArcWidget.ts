@@ -8,7 +8,7 @@ import * as d3 from 'd3'
 @Component({
   name: 'ArcWidget'
 })
-export default class PieWidget extends Vue {
+export default class extends Vue {
   @Prop() settings!: IWidgetBlock & { chartSettings: IChartPieSetting };
 
   innerValue: number = 0
