@@ -49,7 +49,7 @@ export function RadarChart(data, options) {
     maxValue: 0, // What is the value that the biggest circle will represent
     labelFactor: 1.25, // How much farther than the radius of the outer circle should the labels be placed
     wrapWidth: 60, // The number of pixels after which a label needs to be given a new line
-    opacityArea: 0.35, // The opacity of the area of the blob
+    opacityArea: 0.15, // The opacity of the area of the blob
     dotRadius: 4, // The size of the colored circles of each blog
     opacityCircles: 0.035, // The opacity of the circles of each blob
     strokeWidth: 2, // The width of the stroke around each blob
@@ -94,14 +94,14 @@ export function RadarChart(data, options) {
   // Create the container SVG and g
 
   // Calculate width and height
-  var height = cfg.h + cfg.margin.top + cfg.margin.bottom
-  var width = cfg.w + cfg.margin.left + cfg.margin.right
+  const height = cfg.h + cfg.margin.top + cfg.margin.bottom
+  const width = cfg.w + cfg.margin.left + cfg.margin.right
 
   // Initiate the radar chart SVG
   const { svg } = options
 
   // Append a g element
-  var g = svg
+  const g = svg
     .append('g')
     .attr(
       'transform',
@@ -115,21 +115,21 @@ export function RadarChart(data, options) {
   // Glow filter for some extra pizzazz
 
   // Filter for the outside glow
-  var filter = g
+  const filter = g
     .append('defs')
     .append('filter')
     .attr('id', 'glow')
-  var feGaussianBlur = filter
+  const feGaussianBlur = filter
     .append('feGaussianBlur')
     .attr('stdDeviation', '2.5')
     .attr('result', 'coloredBlur')
-  var feMerge = filter.append('feMerge')
-  var feMergeNode1 = feMerge.append('feMergeNode').attr('in', 'coloredBlur')
-  var feMergeNode2 = feMerge.append('feMergeNode').attr('in', 'SourceGraphic')
+  const feMerge = filter.append('feMerge')
+  const feMergeNode1 = feMerge.append('feMergeNode').attr('in', 'coloredBlur')
+  const feMergeNode2 = feMerge.append('feMergeNode').attr('in', 'SourceGraphic')
 
   // Draw the Circular grid
   // Wrapper for the grid & axes
-  var axisGrid = g.append('g').attr('class', 'axisWrapper')
+  const axisGrid = g.append('g').attr('class', 'axisWrapper')
 
   // Draw the background circles
   axisGrid
@@ -167,7 +167,7 @@ export function RadarChart(data, options) {
 
   // Draw the axes
   // Create the straight lines radiating outward from the center
-  var axis = axisGrid
+  const axis = axisGrid
     .selectAll('.axis')
     .data(allAxis)
     .enter()
@@ -192,6 +192,8 @@ export function RadarChart(data, options) {
     .attr('class', 'legend')
     .style('font-size', '11px')
     .attr('text-anchor', 'middle')
+    .attr('fill', 'var(--color-text)')
+    // .attr('fill-opacity', '0.6')
     .attr('dy', '0.35em')
     .attr('x', (_, i) => rScale(maxValue * cfg.labelFactor) * Math.cos(angleSlice * i - Math.PI / 2))
     .attr('y', (_, i) => rScale(maxValue * cfg.labelFactor) * Math.sin(angleSlice * i - Math.PI / 2))
@@ -200,7 +202,7 @@ export function RadarChart(data, options) {
 
   // Draw the radar chart blobs
   // The radial line function
-  var radarLine = d3
+  const radarLine = d3
     .lineRadial()
     .curve(d3.curveBasisClosed)
     .radius((d) => rScale(d.value))
@@ -211,7 +213,7 @@ export function RadarChart(data, options) {
   }
 
   // Create a wrapper for the blobs
-  var blobWrapper = g
+  const blobWrapper = g
     .selectAll('.radarWrapper')
     .data(data)
     .enter()
@@ -222,12 +224,8 @@ export function RadarChart(data, options) {
   blobWrapper
     .append('path')
     .attr('class', 'radarArea')
-    .attr('d', function(d, i) {
-      return radarLine(d)
-    })
-    .style('fill', function(d, i) {
-      return cfg.color(i)
-    })
+    .attr('d', (d, i) => radarLine(d))
+    .style('fill', (d, i) => cfg.color(i))
     .style('fill-opacity', cfg.opacityArea)
     .on('mouseover', function(d, i) {
       // Dim all blobs
@@ -274,12 +272,13 @@ export function RadarChart(data, options) {
 
   // Append invisible circles for tooltip
   // Wrapper for the invisible circles on top
-  var blobCircleWrapper = g
+  const blobCircleWrapper = g
     .selectAll('.radarCircleWrapper')
     .data(data)
     .enter()
     .append('g')
     .attr('class', 'radarCircleWrapper')
+    .style('fill', (d, i) => cfg.color(i))
 
   // Append a set of invisible circles on top for the mouseover pop-up
   blobCircleWrapper
@@ -288,18 +287,17 @@ export function RadarChart(data, options) {
     .enter()
     .append('circle')
     .attr('class', 'radarInvisibleCircle')
-    .attr('r', cfg.dotRadius * 1.5)
+    .attr('r', cfg.dotRadius)
     .attr('cx', function(d, i) {
       return rScale(d.value) * Math.cos(angleSlice * i - Math.PI / 2)
     })
     .attr('cy', function(d, i) {
       return rScale(d.value) * Math.sin(angleSlice * i - Math.PI / 2)
     })
-    .style('fill', 'none')
     .style('pointer-events', 'all')
     .on('mouseover', function(d, i) {
-      var newX = parseFloat(d3.select(this).attr('cx')) - 10
-      var newY = parseFloat(d3.select(this).attr('cy')) - 10
+      const newX = parseFloat(d3.select(this).attr('cx')) - 10
+      const newY = parseFloat(d3.select(this).attr('cy')) - 10
 
       tooltip
         .attr('x', newX)
@@ -318,7 +316,7 @@ export function RadarChart(data, options) {
     })
 
   // Set up the small tooltip for when you hover over a circle
-  var tooltip = g
+  const tooltip = g
     .append('text')
     .attr('class', 'tooltip')
     .style('opacity', 0)
