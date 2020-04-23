@@ -4,7 +4,6 @@ import { CreateElement, VNode } from 'vue/types'
 import { ThemeModule } from '@/store/theme/ThemeModule'
 
 import * as d3 from 'd3'
-import { animate } from '@/utils/animation'
 import { generateAxis } from '@/utils/d3/axis'
 import { generateGrid, generateLine, initLinePosition } from '@/utils/d3/line'
 
@@ -143,13 +142,10 @@ export default class extends Vue {
       .attr('opacity', 0)
 
     body.on('mouseenter', () => {
-      animate({
-        duration: 200,
-        timing: (n) => n,
-        draw: (progress) => {
-          svg.selectAll('#pointer, #tooltip-line-x, #tooltip-line-y').attr('opacity', 1 * progress)
-        }
-      })
+      svg.selectAll('#pointer, #tooltip-line-x, #tooltip-line-y')
+        .transition()
+        .duration(200)
+        .style('opacity', 1)
     }).on('mousemove', () => {
       const { index, value } = bisect(d3.event.offsetX)
       const position = { x: x(index), y: y(value) }
@@ -164,13 +160,10 @@ export default class extends Vue {
       svg.select('#pointer')
         .attr('transform', `translate(${position.x}, ${position.y})`)
     }).on('mouseleave', () => {
-      animate({
-        duration: 200,
-        timing: (n) => n,
-        draw: (progress) => {
-          svg.selectAll('#pointer, #tooltip-line-x, #tooltip-line-y').attr('opacity', 1 - progress)
-        }
-      })
+      svg.selectAll('#pointer, #tooltip-line-x, #tooltip-line-y')
+        .transition()
+        .duration(200)
+        .style('opacity', 0)
     })
   }
 }
