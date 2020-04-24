@@ -18,6 +18,10 @@ export default class extends Vue {
     if (this.$route.meta.headerTitle) {
       return h('header', { class: this.classes }, [
         h('div', { class: ['header-menu__active'] }, [
+          !PageModule.onMainPage && h('routerLink', {
+            props: { to: { name: 'index' } },
+            class: 'header-menu__back-link'
+          }, 'go back'),
           h('h2', { class: 'header-menu__title' }, [this.currentText]),
           h('AppCheckbox', { on: { change: this.changeTheme } }),
           h('routerLink', { props: { to: { name: 'theme' } } }, [
