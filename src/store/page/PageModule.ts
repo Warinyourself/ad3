@@ -1,4 +1,5 @@
 import { Module, VuexModule, getModule, Mutation, Action } from 'vuex-module-decorators'
+import { TAppRoute } from '@/router'
 import { IActiveBlock } from '@/types'
 import store from '@/store'
 
@@ -10,6 +11,7 @@ export interface PageState {
 
 @Module({ dynamic: true, store, name: 'page' })
 class Page extends VuexModule implements PageState {
+  route: TAppRoute | undefined = undefined
   layout = 'default'
   activeBlocks: Array<IActiveBlock> = []
   activeBlockLinks: Array<string> = []
@@ -23,6 +25,10 @@ class Page extends VuexModule implements PageState {
   UPDATE_ACTIVE_BLOCK(block: IActiveBlock) {
     this.activeBlocks = [ block ]
     this.activeBlockLinks = [ block.id ]
+  }
+
+  get onMainPage() {
+    return this.route && this.route.name === 'index'
   }
 
   get getActiveBlock() {

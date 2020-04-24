@@ -10,7 +10,6 @@ export default class extends Vue {
     return h('div', { class: 'home' }, this.colors.map(([color, value]) => {
       return h('div', {
         class: 'theme-page-block',
-        // style: `background-color: ${value}`
         style: `background-image: ${this.generateGradient(color)}`
       }, [
         h('h5', { class: 'theme-page-block__title' }, `${color} is ${value}`)
