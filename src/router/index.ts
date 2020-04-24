@@ -1,8 +1,10 @@
 import Vue from 'vue'
 import VueRouter, { RouteConfig, Route } from 'vue-router'
+
 import IndexPage from '@/views/IndexPage'
 import ThemePage from '@/views/ThemePage'
 import NotFoundPage from '@/views/NotFoundPage'
+
 import { PageModule } from '@/store/page/PageModule'
 
 Vue.use(VueRouter)
@@ -21,6 +23,14 @@ const routes: Array<RouteConfig & IRouterMeta> = [
     component: IndexPage,
     meta: {
       headerTitle: 'Main Page'
+    }
+  },
+  {
+    path: '/theme',
+    name: 'theme',
+    component: ThemePage,
+    meta: {
+      headerTitle: 'Themes'
     }
   },
   {
