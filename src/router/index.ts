@@ -22,6 +22,15 @@ const routes: Array<RouteConfig & IRouterMeta> = [
     meta: {
       headerTitle: 'Main Page'
     }
+  },
+  {
+    path: '*',
+    name: 'notFoundPage',
+    component: NotFoundPage,
+    meta: {
+      headerTitle: 'Page not found',
+      layout: 'none'
+    }
   }
 ]
 
