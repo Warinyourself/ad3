@@ -1,12 +1,16 @@
 import Vue from 'vue'
 import VueRouter, { RouteConfig, Route } from 'vue-router'
-import IndexPage from '../views/IndexPage'
+import IndexPage from '@/views/IndexPage'
+import ThemePage from '@/views/ThemePage'
+import NotFoundPage from '@/views/NotFoundPage'
+import { PageModule } from '@/store/page/PageModule'
 
 Vue.use(VueRouter)
 
 interface IRouterMeta {
   meta: {
     headerTitle: string
+    layout?: string
   }
 }
 
@@ -28,7 +32,13 @@ const router: VueRouter = new VueRouter({
 })
 
 router.beforeEach((to: Route, from: Route, next: Function) => {
+  const layout = to.meta.layout || 'default'
   document.title = to.meta.headerTitle
+
+  if (PageModule.layout !== layout) {
+    PageModule.SET_PAGE_STATE({ key: 'layout', value: layout })
+  }
+
   next()
 })
 
