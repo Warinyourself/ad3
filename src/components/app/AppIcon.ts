@@ -1,7 +1,7 @@
 import { Component, Prop, Vue } from 'vue-property-decorator'
 
 @Component({
-  name: 'HeaderBlock',
+  name: 'AppIcon',
   template: `
     <svg
     v-if="name === 'statistics'"
