@@ -75,6 +75,5 @@ export default class extends Vue {
     }
 
     const radar = RadarChart(data, radarChartOptions)
-    console.log({ radar })
   }
 }

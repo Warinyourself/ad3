@@ -4,7 +4,7 @@ import { PageModule } from '@/store/page/PageModule'
 import { ThemeModule } from '@/store/theme/ThemeModule'
 
 @Component({
-  name: 'HeaderBlock'
+  name: 'Header'
 })
 export default class extends Vue {
   get classes() {
@@ -16,10 +16,15 @@ export default class extends Vue {
 
   render(h: CreateElement): VNode {
     if (this.$route.meta.headerTitle) {
-      return h('div', { class: this.classes }, [
+      return h('header', { class: this.classes }, [
         h('div', { class: ['header-menu__active'] }, [
           h('h2', { class: 'header-menu__title' }, [this.currentText]),
-          h('AppCheckbox', { on: { change: this.changeTheme } })
+          h('AppCheckbox', { on: { change: this.changeTheme } }),
+          h('routerLink', { props: { to: { name: 'theme' } } }, [
+            h('AppIcon', {
+              class: 'ml-2 icon-3 icon--hover-main', props: { name: 'love' }
+            })
+          ])
         ])
       ]
       )
