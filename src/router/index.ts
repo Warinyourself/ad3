@@ -53,14 +53,9 @@ const router: VueRouter = new VueRouter({
 })
 
 router.beforeEach((to: Route, from: Route, next: Function) => {
-  const layout = to.meta.layout || 'default'
   document.title = to.meta.headerTitle
 
-  PageModule.SET_PAGE_STATE({ key: 'route', value: to })
-
-  if (PageModule.layout !== layout) {
-    PageModule.SET_PAGE_STATE({ key: 'layout', value: layout })
-  }
+  PageModule.SET_PAGE_STATE({ key: 'route', value: to as TAppRoute })
 
   next()
 })

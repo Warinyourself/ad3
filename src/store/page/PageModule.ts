@@ -4,7 +4,7 @@ import { IActiveBlock } from '@/types'
 import store from '@/store'
 
 export interface PageState {
-  layout: String,
+  route: TAppRoute | undefined
   activeBlocks: Array<IActiveBlock>,
   activeBlockLinks: Array<String>
 }
@@ -12,7 +12,6 @@ export interface PageState {
 @Module({ dynamic: true, store, name: 'page' })
 class Page extends VuexModule implements PageState {
   route: TAppRoute | undefined = undefined
-  layout = 'default'
   activeBlocks: Array<IActiveBlock> = []
   activeBlockLinks: Array<string> = []
 
@@ -25,6 +24,10 @@ class Page extends VuexModule implements PageState {
   UPDATE_ACTIVE_BLOCK(block: IActiveBlock) {
     this.activeBlocks = [ block ]
     this.activeBlockLinks = [ block.id ]
+  }
+
+  get layout() {
+    return (this.route && this.route.meta.layout) || 'default'
   }
 
   get onMainPage() {
