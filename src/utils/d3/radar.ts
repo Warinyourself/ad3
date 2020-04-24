@@ -64,8 +64,8 @@ export function RadarChart(data, options) {
       if (typeof options[i] !== 'undefined') {
         cfg[i] = options[i]
       }
-    } // for i
-  } // if
+    }
+  }
 
   // If the supplied maxValue is smaller than the actual one, replace by the max in the data
   var maxValue = Math.max(
@@ -81,7 +81,7 @@ export function RadarChart(data, options) {
 
   const allAxis = data[0].map((i) => i.axis) // Names of each axis
   const total = allAxis.length // The number of different axes
-  const radius = Math.min(cfg.w / 2, cfg.h / 2) // Radius of the outermost circle
+  const radius = Math.min(cfg.w / 2.6, cfg.h / 2.6) // Radius of the outermost circle
   const Format = d3.format('%') // Percentage formatting
   const angleSlice = (Math.PI * 2) / total // The width in radians of each "slice"
 
@@ -103,17 +103,9 @@ export function RadarChart(data, options) {
   // Append a g element
   const g = svg
     .append('g')
-    .attr(
-      'transform',
-      'translate(' +
-        (cfg.w / 2 + cfg.margin.left) +
-        ',' +
-        (cfg.h / 2 + cfg.margin.top) +
-        ')'
-    )
+    .attr('transform', `translate(${(cfg.w / 2 + cfg.margin.left)}, ${(cfg.h / 2 + cfg.margin.top)})`)
 
   // Glow filter for some extra pizzazz
-
   // Filter for the outside glow
   const filter = g
     .append('defs')

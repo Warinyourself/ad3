@@ -25,8 +25,6 @@ export default class extends Vue {
     const svg = d3.select(node as Element)
       .attr('width', minValue)
       .attr('height', minValue)
-      .append('g')
-      .attr('transform', `translate(${minValue / 2}, ${minValue / 2})`)
 
     const data = [
       [
@@ -68,9 +66,8 @@ export default class extends Vue {
 
     const radarChartOptions = {
       svg,
-      w: radius * 1.55,
-      h: radius * 1.55,
-      margin: margin,
+      w: radius * 2,
+      h: radius * 2,
       maxValue: 0.5,
       levels: 5,
       roundStrokes: true,
