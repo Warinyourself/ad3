@@ -15,7 +15,8 @@ export default class extends Vue {
       }, [
         h('h5', { class: 'theme-page-block__title' }, [
           h('p', `${color} is ${value}`),
-          h('p', `${ColorModule.convertToHsl(value)}`)
+          h('p', `${ColorModule.convertToHsl(value)}`),
+          h('p', `${ColorModule.getColorName(value)}`)
         ])
       ])
     }))

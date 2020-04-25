@@ -35,6 +35,20 @@ class Color extends VuexModule implements ColorState {
     return this.changeHsl(this.convertToHsl(this.active) as string, 0, -0, -15)
   }
 
+  get getColorName() {
+    return (color: string) => {
+      const colors = ['red', 'green', 'blue']
+      const hsl = this.convertToHsl(color, { view: 'array' }) as TColorArray
+      let part = 360 / colors.length
+      let finalColor = colors.find((color, index) => {
+        const [min, max] = [index * part, (index + 1) * part]
+        if (hsl[0] > min && hsl[0] < max) return color
+      })
+
+      return `${finalColor || ''} - ${hsl[0]}`
+    }
+  }
+
   get convertToHsl() {
     return (color: string, convertOptions?: IConvertOptions) => {
       let type = color.slice(0, 3)
