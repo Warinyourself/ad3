@@ -1,6 +1,7 @@
 import { Component, Vue } from 'vue-property-decorator'
 import { CreateElement, VNode } from 'vue/types'
 import { ThemeModule } from '@/store/theme/ThemeModule'
+import { ColorModule } from '@/store/color/ColorModule'
 
 @Component({
   name: 'ThemePage'
@@ -12,7 +13,10 @@ export default class extends Vue {
         class: 'theme-page-block',
         style: `background-image: ${this.generateGradient(color)}`
       }, [
-        h('h5', { class: 'theme-page-block__title' }, `${color} is ${value}`)
+        h('h5', { class: 'theme-page-block__title' }, [
+          h('p', `${color} is ${value}`),
+          h('p', `${ColorModule.convertToHsl(value)}`)
+        ])
       ])
     }))
   }
