@@ -83,5 +83,18 @@ export default class extends Vue {
       .attr('width', '5')
       .attr('y', d => y(d.value))
       .attr('height', d => y(0) - y(d.value) - margin.top)
+
+    bar.on('mouseenter', (d, i, nodes) => {
+      console.log({ d, i, nodes })
+      d3.select(nodes[i])
+        .transition()
+        .duration(200)
+        .style('opacity', 1)
+    }).on('mouseleave', (d, i, nodes) => {
+      d3.select(nodes[i])
+        .transition()
+        .duration(200)
+        .style('opacity', '0.8')
+    })
   }
 }
