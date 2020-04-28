@@ -1,29 +1,5 @@
 # AD3
 
-## Project setup
-```
-yarn install
-```
+# Project with D3 awesome charts
+![zK6FkDC](https://user-images.githubusercontent.com/33872448/80529703-80fc1c00-89a0-11ea-9abc-623416bfe2c6.png)
 
-### Compiles and hot-reloads for development
-```
-yarn serve
-```
-
-### Compiles and minifies for production
-```
-yarn build
-```
-
-### Run your unit tests
-```
-yarn test:unit
-```
-
-### Lints and fixes files
-```
-yarn lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
