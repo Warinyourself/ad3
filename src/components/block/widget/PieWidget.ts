@@ -26,24 +26,27 @@ export default class extends Vue {
       .append('g')
       .attr('transform', `translate(${minValue / 2}, ${minValue / 2})`)
 
+    const radialProgress = d3.scaleLinear()
+      .domain([0, Math.PI * 2])
+      .range([0, 100])
     const data = [
       {
         name: 'ADA',
         amount: '32000',
         amountInUsd: '824',
-        color: 'var(--color-active)'
+        color: '--color-active'
       },
       {
         name: 'BTC',
         amount: '0.58',
         amountInUsd: '3892',
-        color: 'var(--color-second)'
+        color: '--color-second'
       },
       {
         name: 'IOTA',
         amount: '5058',
         amountInUsd: '1802',
-        color: 'var(--color-third)'
+        color: '--color-third'
       }
     ]
 
@@ -64,7 +67,25 @@ export default class extends Vue {
     svg.selectAll('path')
       .data(arcs)
       .enter().append('path')
-      .attr('fill', (d: any) => d.data.color)
+      .attr('fill', (d: any) => `var(${d.data.color})`)
       .attr('d', arc as any)
+
+    svg.append('defs')
+      .selectAll('linearGradient')
+      .data(arcs)
+      .enter().append('linearGradient')
+      .attr('id', (_, i) => `gradient-${i}`)
+      .each((d: any, nodes, i) => {
+        const node = d3.select(nodes[i])
+        // console.log({ d, nodes, i, node })
+
+        node.append('stop')
+          .attr('stop-color', (d, i) => `var(${d.data.color})`)
+          .attr('offset', `0%`)
+
+        node.append('stop')
+          .attr('stop-color', (d, i) => `var(${d.data.color}-dark)`)
+          .attr('offset', `100%`)
+      })
   }
 }
