@@ -24,8 +24,8 @@ class Theme extends VuexModule implements ThemeState {
     {
       name: 'light',
       active: '#fc5185',
-      second: '#fc5095',
-      third: '#91e60a',
+      second: '#ffcf7c',
+      third: '#6886c5',
       bg: '#f4eeff'
     }
   ]
