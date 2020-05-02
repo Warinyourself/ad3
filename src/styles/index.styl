@@ -5,17 +5,20 @@
 
 ::-webkit-scrollbar
   width 4px
+  height 4px
   &:hover
     cursor pointer
 
 /* Track */
-::-webkit-scrollbar-track
+::-webkit-scrollbar-track, ::-webkit-scrollbar-corner, ::-webkit-resizer
   background transparent
 
 /* Handle */
 ::-webkit-scrollbar-thumb
   background var(--color-active)
   border-radius 2px
+  &:hover
+    background var(--color-active-light)
 
 html
   font-family 'Source Sans Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI',
@@ -36,7 +39,7 @@ html
   margin 0
   font forText
 
-:root 
+:root
   --color-text #04ded4
   --color-active #04ded4
   --color-second #ff1c76
@@ -44,6 +47,7 @@ html
   --color-bg-dark black
   --color-green #91e60a
   --size-widget-block 20vmin
+  --height-header 36px
 
 h1, h2, h3, h4, h5, h6
   font-weight 300

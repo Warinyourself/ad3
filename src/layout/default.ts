@@ -10,6 +10,6 @@ import { CreateElement, VNode } from 'vue/types'
 })
 export default class extends Vue {
   render(h: CreateElement): VNode {
-    return h('div', [ h(HeaderMenu), this.$slots.default ])
+    return h('div', { class: 'wrapper' }, [ h(HeaderMenu), this.$slots.default ])
   }
 }
