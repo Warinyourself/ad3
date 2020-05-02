@@ -30,7 +30,7 @@ class Page extends VuexModule implements PageState {
     return (this.route && this.route.meta.layout) || 'default'
   }
 
-  get onMainPage() {
+  get isMainPage() {
     return this.route && this.route.name === 'index'
   }
 

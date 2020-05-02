@@ -1,7 +1,7 @@
 import { Component, Vue } from 'vue-property-decorator'
 import { CreateElement, VNode } from 'vue/types'
 import { PageModule } from '@/store/page/PageModule'
-import { ThemeModule } from '@/store/theme/ThemeModule'
+import { ThemeModule } from '@/store/page/theme/ThemeModule'
 
 @Component({
   name: 'Header'
@@ -18,7 +18,7 @@ export default class extends Vue {
     if (this.$route.meta.headerTitle) {
       return h('header', { class: this.classes }, [
         h('div', { class: ['header-menu__active'] }, [
-          !PageModule.onMainPage && h('routerLink', {
+          !PageModule.isMainPage && h('routerLink', {
             props: { to: { name: 'index' } },
             class: 'header-menu__back-link'
           }, 'go back'),

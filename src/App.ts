@@ -5,7 +5,7 @@ import { PageModule } from '@/store/page/PageModule'
 import noneLayout from '@/layout/none.ts'
 import defaultLayout from '@/layout/default.ts'
 
-import { ThemeModule } from '@/store/theme/ThemeModule'
+import { ThemeModule } from '@/store/page/theme/ThemeModule'
 
 @Component({
   name: 'App',

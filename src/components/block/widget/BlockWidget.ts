@@ -11,7 +11,7 @@ import ChordWidget from '@/components/block/widget/ChordWidget'
 import HistogramWidget from '@/components/block/widget/HistogramWidget'
 
 import { PageModule } from '@/store/page/PageModule'
-import { ThemeModule } from '@/store/theme/ThemeModule'
+import { ThemeModule } from '@/store/page/theme/ThemeModule'
 
 let isDoubleClick: any = false
 

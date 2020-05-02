@@ -1,6 +1,6 @@
 import { Component, Vue } from 'vue-property-decorator'
 import { CreateElement, VNode } from 'vue/types'
-import { ThemeModule } from '@/store/theme/ThemeModule'
+import { ThemeModule } from '@/store/page/theme/ThemeModule'
 import { ColorModule } from '@/store/color/ColorModule'
 
 @Component({

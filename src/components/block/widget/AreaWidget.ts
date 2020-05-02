@@ -1,7 +1,7 @@
 import { Component, Prop, Vue } from 'vue-property-decorator'
 import { CreateElement, VNode } from 'vue/types'
 
-import { ThemeModule } from '@/store/theme/ThemeModule'
+import { ThemeModule } from '@/store/page/theme/ThemeModule'
 
 import * as d3 from 'd3'
 import { generateAxis } from '@/utils/d3/axis'
@@ -151,7 +151,7 @@ export default class extends Vue {
       const position = { x: x(index), y: y(value) }
 
       updateLinePosition({
-        animationCallback: (progress: number) => console.log({ progress }),
+        animationCallback: (progress: number) => console.log({ progress }, 'progress'),
         position,
         duration: 400,
         svg
