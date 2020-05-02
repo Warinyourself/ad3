@@ -16,7 +16,7 @@ class Page extends VuexModule implements PageState {
   activeBlockLinks: Array<string> = []
 
   @Mutation
-  SET_PAGE_STATE<T extends this, P extends keyof this>({ key, value }: { key: P, value: T[P] }) {
+  SET_STATE_PAGE<S extends this, K extends keyof this>({ key, value }: { key: K, value: S[K] }) {
     this[key] = value
   }
 

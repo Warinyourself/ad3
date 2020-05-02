@@ -40,7 +40,7 @@ class Theme extends VuexModule implements ThemeState {
   }
 
   @Mutation
-  SET_THEME_STATE<T extends this, P extends keyof this>({ key, value }: { key: P, value: T[P] }) {
+  SET_STATE_THEME<S extends this, K extends keyof this>({ key, value }: { key: K, value: S[K] }) {
     this[key] = value
   }
 
@@ -52,7 +52,7 @@ class Theme extends VuexModule implements ThemeState {
       return null
     }
     const { name, ...colors } = theme
-    this.SET_THEME_STATE({ key: 'theme', value: name })
+    this.SET_STATE_THEME({ key: 'theme', value: name })
 
     ColorModule.setTheme(colors)
   }

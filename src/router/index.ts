@@ -55,7 +55,7 @@ const router: VueRouter = new VueRouter({
 router.beforeEach((to: Route, from: Route, next: Function) => {
   document.title = to.meta.headerTitle
 
-  PageModule.SET_PAGE_STATE({ key: 'route', value: to as TAppRoute })
+  PageModule.SET_STATE_PAGE({ key: 'route', value: to as TAppRoute })
 
   next()
 })
