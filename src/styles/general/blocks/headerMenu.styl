@@ -1,7 +1,22 @@
 .header-menu
+  width 100%
+  z-index 10
+  position fixed
+  top 0
   display flex
   padding 12px
   align-items center
+  &::before
+    content ''
+    width 100%
+    height 100%
+    opacity .7
+    display block
+    background var(--color-bg)
+    top 0
+    left 0
+    z-index -1
+    position absolute 
 
 .header-menu__active
   flex 1 1 auto
