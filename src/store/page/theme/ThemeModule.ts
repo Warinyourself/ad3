@@ -10,7 +10,7 @@ export interface ThemeState {
   themes: Array<ITheme>
 }
 
-@Module({ dynamic: true, store, name: 'page/themes' })
+@Module({ dynamic: true, store, name: 'themes' })
 class Theme extends VuexModule implements ThemeState {
   theme = 'dark'
   themes: Array<ITheme> = [

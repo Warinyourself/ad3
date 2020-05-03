@@ -10,7 +10,7 @@ import RadarWidget from '@/components/block/widget/RadarWidget'
 import ChordWidget from '@/components/block/widget/ChordWidget'
 import HistogramWidget from '@/components/block/widget/HistogramWidget'
 
-import { PageModule } from '@/store/page/PageModule'
+import { BlockModule } from '@/store/page/block/BlockModule'
 import { ThemeModule } from '@/store/page/theme/ThemeModule'
 
 let isDoubleClick: any = false
@@ -61,26 +61,35 @@ export default class extends Vue {
     return classes
   }
 
+  get activeBlock() {
+    return BlockModule.getActiveBlock({ group: 'widget' }) || {}
+  }
+
   get isActiveBlock(): Boolean {
-    const block = PageModule.getActiveBlock
-    return block ? block.id === this.block.id : !!block
+    const block = this.activeBlock
+    return block.id === this.block.id
+  }
+
+  mounted() {
+    BlockModule.ADD_BLOCK(Object.assign(this.block, { group: 'widget' }))
   }
 
   handleClick(event: Event) {
-    const activeBlockId = PageModule.getActiveBlock && PageModule.getActiveBlock.id
+    const { id } = this.activeBlock
     const canRoute = !this.block.noRedirect || isDoubleClick
 
     isDoubleClick = setTimeout(() => { isDoubleClick = false }, 250)
 
-    if (this.block.id === activeBlockId && canRoute) {
+    if (this.block.id === id && canRoute) {
       if (this.block.url) {
         this.$router.push(this.block.url)
       }
       return
     }
 
-    PageModule.UPDATE_ACTIVE_BLOCK({
+    BlockModule.UPDATE_ACTIVE_BLOCK({
       id: this.block.id,
+      group: 'widget',
       title: this.block.title
     })
   }
