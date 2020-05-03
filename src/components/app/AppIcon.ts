@@ -10,6 +10,7 @@ import { Component, Prop, Vue } from 'vue-property-decorator'
     viewBox=".5 .5 49 49"
   >
     <path
+      fill="none"
       d="M4 25A21 21 0 1 0 29 4"
       stroke-width="7"
       stroke-linecap="round"

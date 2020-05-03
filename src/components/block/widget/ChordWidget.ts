@@ -69,7 +69,6 @@ export default class extends Vue {
       .attr('height', height)
       .append('g')
 
-    console.log(ColorModule.active, 'active')
     const colors = [ColorModule.active, ColorModule.second, '#ffe579', '#baf2a9', '#15bde8', '#b29de6']
 
     const wrapper = svg.append('g')

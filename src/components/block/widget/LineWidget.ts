@@ -131,7 +131,7 @@ export default class extends Vue {
       const position = { x: x(index), y: y(value) }
 
       updateLinePosition({
-        animationCallback: (progress: number) => console.log({ progress }),
+        animationCallback: (progress: number) => console.log({ progress }, 'progress'),
         position,
         duration: 400,
         svg
