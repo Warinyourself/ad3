@@ -1,6 +1,7 @@
 import { Component, Vue } from 'vue-property-decorator'
 import { CreateElement, VNode } from 'vue/types'
 import { PageModule } from '@/store/page/PageModule'
+import { BlockModule } from '@/store/page/block/BlockModule'
 import { ThemeModule } from '@/store/page/theme/ThemeModule'
 
 @Component({
@@ -17,18 +18,28 @@ export default class extends Vue {
   render(h: CreateElement): VNode {
     if (this.$route.meta.headerTitle) {
       return h('header', { class: this.classes }, [
-        h('div', { class: ['header-menu__active'] }, [
+        h('AppActiveBlock', {
+          props: {
+            block: {
+              id: 'ThemeViewBlock'
+            }
+          }
+        }, [h('h1', 'Hello')]),
+        h('div', { class: ['header-menu__block'] }, [
           !PageModule.isMainPage && h('routerLink', {
             props: { to: { name: 'index' } },
             class: 'header-menu__back-link'
           }, 'go back'),
           h('h2', { class: 'header-menu__title' }, [this.currentText]),
           h('AppCheckbox', { on: { change: this.changeTheme } }),
-          h('routerLink', { props: { to: { name: 'theme' } } }, [
-            h('AppIcon', {
-              class: 'ml-2 icon-3 icon--hover-main', props: { name: 'love' }
-            })
-          ])
+          h('div', {
+            class: 'ml-2 icon-3 icon--hover-main',
+            on: { click: this.toggleThemeView }
+          }, [ h('AppIcon', { props: { name: 'statistics' } }) ]),
+          h('routerLink', {
+            class: 'ml-2 icon-3 icon--hover-main',
+            props: { to: { name: 'theme' } }
+          }, [ h('AppIcon', { props: { name: 'love' } }) ])
         ])
       ]
       )
@@ -37,15 +48,20 @@ export default class extends Vue {
     }
   }
 
+  get activeBlock() {
+    return BlockModule.getActiveBlock({ group: 'widget' }) || {}
+  }
+
   get currentText(): string {
-    const block = PageModule.getActiveBlock
+    const { name, title } = this.activeBlock
+    const blockTitle = title || name
     const headerTitle = this.$route.meta.headerTitle
-    if (block) {
-      return block.title || block.id
-    } else if (headerTitle) {
-      return headerTitle
-    }
-    return 'Default text'
+
+    return blockTitle || headerTitle || 'Default text'
+  }
+
+  toggleThemeView(event: boolean) {
+    BlockModule.ACTIVATE_BLOCK('ThemeViewBlock')
   }
 
   changeTheme(event: boolean) {
