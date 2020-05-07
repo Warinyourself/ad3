@@ -49,7 +49,7 @@ export interface ModulePath {
 }
 
 export interface IActiveBlock {
-  id?: string
+  id: string
   name?: string
   group?: string
   title?: string

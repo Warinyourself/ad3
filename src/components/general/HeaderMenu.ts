@@ -24,7 +24,7 @@ export default class extends Vue {
               id: 'ThemeViewBlock'
             }
           }
-        }, [h('h1', 'Hello')]),
+        }, [h('h1', 'Themes')]),
         h('div', { class: ['header-menu__block'] }, [
           !PageModule.isMainPage && h('routerLink', {
             props: { to: { name: 'index' } },
@@ -53,15 +53,13 @@ export default class extends Vue {
   }
 
   get currentText(): string {
-    const { name, title } = this.activeBlock
-    const blockTitle = title || name
     const headerTitle = this.$route.meta.headerTitle
 
-    return blockTitle || headerTitle || 'Default text'
+    return this.activeBlock.title || headerTitle || 'Default text'
   }
 
   toggleThemeView(event: boolean) {
-    BlockModule.ACTIVATE_BLOCK('ThemeViewBlock')
+    BlockModule.toggleViewBlock('ThemeViewBlock')
   }
 
   changeTheme(event: boolean) {

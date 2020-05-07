@@ -32,8 +32,13 @@ class Block extends VuexModule implements BlockState {
   ACTIVATE_BLOCK(id: string) {
     const block = this.blocks.find(block => id === block.id)
     if (block) {
-      this.blocks.push(block)
+      this.activeBlocks.push(block)
     }
+  }
+
+  @Mutation
+  HIDE_BLOCK(id: string) {
+    this.activeBlocks = this.activeBlocks.filter(block => block.id !== id)
   }
 
   @Mutation
@@ -43,8 +48,7 @@ class Block extends VuexModule implements BlockState {
   }
 
   get isActiveBlock() {
-    return (option: any) => {
-      const { id, name } = option
+    return (id: string) => {
       return this.activeBlocks.find(block => block.id === id)
     }
   }
@@ -65,6 +69,15 @@ class Block extends VuexModule implements BlockState {
         return getFullBlock(blocksArray[blocksArray.length - 1], fullBlocksArray)
       }
       return getFullBlock(this.activeBlocks[this.activeBlocks.length - 1], this.blocks)
+    }
+  }
+
+  @Action
+  toggleViewBlock(id: string) {
+    if (this.isActiveBlock(id)) {
+      this.HIDE_BLOCK(id)
+    } else {
+      this.ACTIVATE_BLOCK(id)
     }
   }
 }
