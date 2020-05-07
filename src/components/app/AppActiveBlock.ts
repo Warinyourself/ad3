@@ -27,7 +27,14 @@ export default class AppActiveBlock extends Vue {
         click: this.onClick
       }
     }, [
-      h('transition', { props: { name: 'router-animation' } }, [
+      h('transition', {
+        props: { name: 'expand' },
+        on: {
+          enter: this.enter,
+          afterEnter: this.afterEnter,
+          leave: this.leave
+        }
+      }, [
         this.isActive && h('div', this.$slots.default)
       ])
     ])
@@ -43,5 +50,44 @@ export default class AppActiveBlock extends Vue {
 
   onClick() {
     console.log('Click on active block')
+  }
+
+  enter(element) {
+    const { width } = getComputedStyle(element)
+
+    element.style.width = width
+    element.style.position = 'absolute'
+    element.style.visibility = 'hidden'
+    element.style.height = 'auto'
+
+    let { height } = getComputedStyle(element)
+
+    element.style.width = null
+    element.style.position = null
+    element.style.visibility = null
+    element.style.height = 0
+
+    // Trigger the animation.
+    // We use `requestAnimationFrame` because we need
+    // to make sure the browser has finished
+    // painting after setting the `height`
+    // to `0` in the line above.
+    requestAnimationFrame(() => {
+      element.style.height = height
+    })
+  }
+
+  afterEnter(element) {
+    element.style.height = 'auto'
+  }
+
+  leave(element) {
+    let height = getComputedStyle(element).height
+
+    element.style.height = height
+
+    requestAnimationFrame(() => {
+      element.style.height = 0
+    })
   }
 }
