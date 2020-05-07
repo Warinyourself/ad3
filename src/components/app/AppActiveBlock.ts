@@ -27,7 +27,9 @@ export default class AppActiveBlock extends Vue {
         click: this.onClick
       }
     }, [
-      this.isActive && h('div', this.$slots.default)
+      h('transition', { props: { name: 'router-animation' } }, [
+        this.isActive && h('div', this.$slots.default)
+      ])
     ])
   }
 
