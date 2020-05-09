@@ -9,8 +9,8 @@ export interface BlockState {
 }
 
 interface ActiveBlock {
-  id?: String
-  group?: String
+  id: string
+  group?: string
 }
 
 @Module({ dynamic: true, store, name: 'block' })
@@ -51,6 +51,16 @@ class Block extends VuexModule implements BlockState {
     return (id: string) => {
       return this.activeBlocks.find(block => block.id === id)
     }
+  }
+
+  get getFullActiveBlock() {
+    return (id: string) => {
+      return this.blocks.find(block => block.id === id)
+    }
+  }
+
+  get getFullActiveBlocks() {
+    return this.activeBlocks.forEach((block) => this.getFullActiveBlock(block.id))
   }
 
   get getActiveBlock() {

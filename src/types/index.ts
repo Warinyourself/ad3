@@ -50,6 +50,7 @@ export interface ModulePath {
 
 export interface IActiveBlock {
   id: string
+  activator: string,
   name?: string
   group?: string
   title?: string
