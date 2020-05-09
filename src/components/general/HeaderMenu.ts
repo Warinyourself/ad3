@@ -21,7 +21,8 @@ export default class extends Vue {
         h('AppActiveBlock', {
           props: {
             block: {
-              id: 'ThemeViewBlock'
+              id: 'ThemeViewBlock',
+              activator: 'T'
             }
           }
         }, [h('h1', 'Themes')]),
