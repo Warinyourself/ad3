@@ -21,8 +21,11 @@ class Key extends VuexModule implements KeyState {
     const { key, keyCode, shiftKey } = event
     const { blocks } = BlockModule
     const block = blocks.find(block => block.activator === key)
+    const isEscape = event.which === 27 || event.key === 'Escape'
 
-    if (block) {
+    if (isEscape) {
+      BlockModule.DELETE_LATEST()
+    } else if (block) {
       BlockModule.toggleViewBlock(block.id)
     }
   }

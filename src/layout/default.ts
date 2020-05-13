@@ -15,6 +15,6 @@ export default class extends Vue {
   }
 
   mounted() {
-    document.documentElement.addEventListener('keypress', KeyModule.handleKeypress)
+    document.documentElement.addEventListener('keydown', KeyModule.handleKeypress)
   }
 }

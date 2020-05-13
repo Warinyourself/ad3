@@ -47,6 +47,11 @@ class Block extends VuexModule implements BlockState {
     this.activeBlocks.push({ id, group })
   }
 
+  @Mutation
+  DELETE_LATEST() {
+    this.activeBlocks.pop()
+  }
+
   get isActiveBlock() {
     return (id: string) => {
       return this.activeBlocks.find(block => block.id === id)
