@@ -49,7 +49,7 @@ export default class AppActiveBlock extends Vue {
   }
 
   onClick() {
-    console.log('Click on active block')
+    console.log('Handle click on active block')
   }
 
   enter(element) {

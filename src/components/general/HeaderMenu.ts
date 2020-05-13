@@ -1,13 +1,18 @@
 import { Component, Vue } from 'vue-property-decorator'
 import { CreateElement, VNode } from 'vue/types'
+
 import { PageModule } from '@/store/page/PageModule'
 import { BlockModule } from '@/store/page/block/BlockModule'
 import { ThemeModule } from '@/store/page/theme/ThemeModule'
 
+import ThemeSelectionBlock from '@/components/general/ThemeSelectionBlock'
+
 @Component({
-  name: 'Header'
+  components: {
+    ThemeSelectionBlock
+  }
 })
-export default class extends Vue {
+export default class Header extends Vue {
   get classes() {
     const classes: any = {}
     const pre = 'header-menu'
@@ -25,7 +30,7 @@ export default class extends Vue {
               activator: 'T'
             }
           }
-        }, [h('h1', 'Themes')]),
+        }, [h(ThemeSelectionBlock)]),
         h('div', { class: ['header-menu__block'] }, [
           !PageModule.isMainPage && h('routerLink', {
             props: { to: { name: 'index' } },

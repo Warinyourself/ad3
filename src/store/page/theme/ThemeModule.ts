@@ -1,7 +1,7 @@
 import { Module, VuexModule, getModule, Mutation, Action } from 'vuex-module-decorators'
 import store from '@/store'
 
-import { ITheme } from './ThemeModels'
+import { ITheme } from '@/store/page/theme/ThemeModels'
 import { ColorModule } from '@/store/color/ColorModule'
 import { TColorArray } from '@/store/color/ColorModels'
 
