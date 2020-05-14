@@ -7,12 +7,14 @@ import { TColorArray } from '@/store/color/ColorModels'
 
 export interface ThemeState {
   theme: String
+  mode: String
   themes: Array<ITheme>
 }
 
 @Module({ dynamic: true, store, name: 'themes' })
 class Theme extends VuexModule implements ThemeState {
   theme = 'dark'
+  mode = 'light'
   themes: Array<ITheme> = [
     {
       name: 'dark',
@@ -24,6 +26,13 @@ class Theme extends VuexModule implements ThemeState {
     {
       name: 'light',
       active: '#fc5185',
+      second: '#ffcf7c',
+      third: '#6886c5',
+      bg: '#f4eeff'
+    },
+    {
+      name: '174976',
+      active: '#424874',
       second: '#ffcf7c',
       third: '#6886c5',
       bg: '#f4eeff'

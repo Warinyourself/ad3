@@ -17,7 +17,7 @@ class Key extends VuexModule implements KeyState {
   }
 
   @Action
-  handleKeypress(event) {
+  handleKeypress(event: KeyboardEvent) {
     const { key, keyCode, shiftKey } = event
     const { blocks } = BlockModule
     const block = blocks.find(block => block.activator === key)
