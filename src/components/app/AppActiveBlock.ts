@@ -21,12 +21,7 @@ export default class AppActiveBlock extends Vue {
   }
 
   render(h: CreateElement): VNode {
-    return h('div', {
-      class: this.classes,
-      on: {
-        click: this.onClick
-      }
-    }, [
+    return h('div', { class: this.classes }, [
       h('transition', {
         props: { name: 'expand' },
         on: {
@@ -35,13 +30,27 @@ export default class AppActiveBlock extends Vue {
           leave: this.leave
         }
       }, [
-        this.isActive && h('div', this.$slots.default)
+        this.isActive && h('div', {
+          on: {
+            click: this.onClick
+          },
+          directives: [
+            {
+              name: 'click-outside',
+              value: this.clickOutside
+            }
+          ]
+        }, this.$slots.default)
       ])
     ])
   }
 
   get isActive() {
     return BlockModule.isActiveBlock(this.block.id)
+  }
+
+  clickOutside() {
+    BlockModule.CLOSE_LATEST()
   }
 
   mounted() {

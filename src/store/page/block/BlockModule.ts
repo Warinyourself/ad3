@@ -48,7 +48,7 @@ class Block extends VuexModule implements BlockState {
   }
 
   @Mutation
-  DELETE_LATEST() {
+  CLOSE_LATEST() {
     this.activeBlocks.pop()
   }
 
