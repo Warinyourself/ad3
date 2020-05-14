@@ -37,7 +37,6 @@ export default class Header extends Vue {
             class: 'header-menu__back-link'
           }, 'go back'),
           h('h2', { class: 'header-menu__title' }, [this.currentText]),
-          h('AppCheckbox', { on: { change: this.changeTheme } }),
           h('div', {
             class: 'ml-2 icon-3 icon--hover-main',
             on: { click: this.toggleThemeView }
@@ -66,10 +65,5 @@ export default class Header extends Vue {
 
   toggleThemeView(event: boolean) {
     BlockModule.toggleViewBlock('ThemeViewBlock')
-  }
-
-  changeTheme(event: boolean) {
-    const theme = event ? 'light' : 'dark'
-    ThemeModule.updateTheme(theme)
   }
 }
