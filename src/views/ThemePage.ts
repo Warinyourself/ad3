@@ -13,7 +13,7 @@ export default class extends Vue {
         class: 'theme-page-block',
         style: `background-image: ${this.generateGradient(color)}`
       }, [
-        h('h5', { class: 'theme-page-block__title' }, [
+        h('h5', { class: 'theme-page-block__title bg-anti-element' }, [
           h('p', `${color} is ${value}`),
           h('p', `${ColorModule.convertToHsl(value)}`),
           h('p', `${ColorModule.getColorName(value)}`)
