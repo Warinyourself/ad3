@@ -2,7 +2,7 @@ import { Module, VuexModule, getModule, Action, Mutation } from 'vuex-module-dec
 import store from '@/store'
 
 import { TColorArray, IConvertOptions } from './ColorModels'
-import { ITheme, TColor } from '@/store/theme/ThemeModels'
+import { ITheme, TColor } from '@/store/page/theme/ThemeModels'
 
 export type ColorState = {
   [key in TColor]: string
@@ -14,6 +14,7 @@ class Color extends VuexModule implements ColorState {
   second: string = ''
   third: string = ''
   bg: string = ''
+  fg: string = ''
 
   get getGlobalCSSVariable() {
     return (name: string) => getComputedStyle(document.documentElement).getPropertyValue(name)
@@ -136,17 +137,35 @@ class Color extends VuexModule implements ColorState {
   setTheme(theme: Omit<ITheme, 'name'>) {
     this.SET_THEME(theme)
 
+    const ignoreHue = ['fg']
     const hue = ['dark', '', 'light']
-    const changeColor = (color: string, hue: number) => {
+    const changeHue = (color: string, hue: number) => {
       return this.changeHsl(this.convertToHsl(color) as string, 0, -0, hue)
     }
     const hueStep = 5
     const hueStart = (hue.length - 2) * hueStep * -1
 
+    if (theme.fg === undefined) {
+      const name = `--color-fg`
+
+      this.setGlobalCSSVariable({ name, value: theme.active })
+    }
+
     Object.entries(theme).forEach(([color, colorValue]) => {
+      if (!colorValue) {
+        return
+      }
+
+      if (ignoreHue.includes(color)) {
+        const name = `--color-${color}`
+
+        this.setGlobalCSSVariable({ name, value: colorValue })
+        return
+      }
+
       hue.forEach((hue, i) => {
         const name = `--color-${color}${hue ? '-' + hue : ''}`
-        const value = changeColor(colorValue, hueStart + (i * hueStep))
+        const value = changeHue(colorValue, hueStart + (i * hueStep))
 
         this.setGlobalCSSVariable({ name, value })
       })
