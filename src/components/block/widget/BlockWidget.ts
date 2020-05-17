@@ -92,5 +92,7 @@ export default class extends Vue {
       group: 'widget',
       title: this.block.title
     })
+
+    event.stopPropagation()
   }
 }
