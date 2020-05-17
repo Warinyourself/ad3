@@ -6,15 +6,12 @@ import App from '@/App.ts'
 import store from '@/store'
 import router from '@/router'
 import i18n from '@/locales'
-import vClickOutside from 'v-click-outside'
 
 import './registerServiceWorker'
 
 import AppIcon from '@/components/app/AppIcon'
 import AppCheckbox from '@/components/app/AppCheckbox'
 import AppActiveBlock from '@/components/app/AppActiveBlock'
-
-Vue.use(vClickOutside)
 
 Vue.component('AppIcon', AppIcon)
 Vue.component('AppCheckbox', AppCheckbox)

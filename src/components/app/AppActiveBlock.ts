@@ -33,13 +33,7 @@ export default class AppActiveBlock extends Vue {
         this.isActive && h('div', {
           on: {
             click: this.onClick
-          },
-          directives: [
-            {
-              name: 'click-outside',
-              value: this.clickOutside
-            }
-          ]
+          }
         }, this.$slots.default)
       ])
     ])
@@ -47,10 +41,6 @@ export default class AppActiveBlock extends Vue {
 
   get isActive() {
     return BlockModule.isActiveBlock(this.block.id) || this.block.hasActivator === false
-  }
-
-  clickOutside() {
-    BlockModule.CLOSE_LATEST()
   }
 
   mounted() {
