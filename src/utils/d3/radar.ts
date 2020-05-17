@@ -3,24 +3,24 @@ import * as d3 from 'd3'
 export function RadarChart(data, options) {
   function wrap(text, width) {
     text.each(function() {
-      var text = d3.select(this)
-      var words = text
+      let text = d3.select(this)
+      let words = text
         .text()
         .split(/\s+/)
         .reverse()
-      var word
-      var line = []
-      var lineNumber = 0
-      var lineHeight = 1.4 // ems
-      var y = text.attr('y')
-      var x = text.attr('x')
-      var dy = parseFloat(text.attr('dy'))
-      var tspan = text
+      let word
+      let line = []
+      let lineNumber = 0
+      let lineHeight = 1.4 // ems
+      let y = text.attr('y')
+      let x = text.attr('x')
+      let dy = parseFloat(text.attr('dy'))
+      let tspan = text
         .text(null)
         .append('tspan')
         .attr('x', x)
         .attr('y', y)
-        .attr('fill', 'var(--color-text)')
+        .attr('fill', 'var(--color-fg)')
         .attr('dy', dy + 'em')
 
       while ((word = words.pop())) {
@@ -60,7 +60,7 @@ export function RadarChart(data, options) {
 
   // Put all of the options into a variable called cfg
   if (typeof options !== 'undefined') {
-    for (var i in options) {
+    for (let i in options) {
       if (typeof options[i] !== 'undefined') {
         cfg[i] = options[i]
       }
@@ -68,15 +68,9 @@ export function RadarChart(data, options) {
   }
 
   // If the supplied maxValue is smaller than the actual one, replace by the max in the data
-  var maxValue = Math.max(
+  let maxValue = Math.max(
     cfg.maxValue,
-    d3.max(data, function(i) {
-      return d3.max(
-        i.map(function(o) {
-          return o.value
-        })
-      )
-    })
+    d3.max(data, (i) => d3.max(i.map((o) => o.value)))
   )
 
   const allAxis = data[0].map((i) => i.axis) // Names of each axis
@@ -86,7 +80,7 @@ export function RadarChart(data, options) {
   const angleSlice = (Math.PI * 2) / total // The width in radians of each "slice"
 
   // Scale for the radius
-  var rScale = d3
+  let rScale = d3
     .scaleLinear()
     .range([0, radius])
     .domain([0, maxValue])
@@ -146,15 +140,11 @@ export function RadarChart(data, options) {
       .append('text')
       .attr('class', 'axisLabel')
       .attr('x', 4)
-      .attr('y', function(d) {
-        return (-d * radius) / cfg.levels
-      })
+      .attr('y', (d) => (-d * radius) / cfg.levels)
       .attr('dy', '0.4em')
       .style('font-size', '10px')
-      .attr('fill', 'var(--color-second)')
-      .text(function(d, i) {
-        return Format((maxValue * d) / cfg.levels)
-      })
+      .attr('fill', 'var(--color-fg)')
+      .text((d) => Format((maxValue * d) / cfg.levels))
   }
 
   // Draw the axes
@@ -184,13 +174,13 @@ export function RadarChart(data, options) {
     .attr('class', 'legend')
     .style('font-size', '11px')
     .attr('text-anchor', 'middle')
-    .attr('fill', 'var(--color-text)')
-    // .attr('fill-opacity', '0.6')
+    .attr('fill', 'var(--color-fg)')
     .attr('dy', '0.35em')
     .attr('x', (_, i) => rScale(maxValue * cfg.labelFactor) * Math.cos(angleSlice * i - Math.PI / 2))
     .attr('y', (_, i) => rScale(maxValue * cfg.labelFactor) * Math.sin(angleSlice * i - Math.PI / 2))
     .text((d) => d)
     .call(wrap, cfg.wrapWidth)
+    .attr('fill', 'var(--color-fg)')
 
   // Draw the radar chart blobs
   // The radial line function
@@ -219,7 +209,7 @@ export function RadarChart(data, options) {
     .attr('d', (d, i) => radarLine(d))
     .style('fill', (d, i) => cfg.color(i))
     .style('fill-opacity', cfg.opacityArea)
-    .on('mouseover', function(d, i) {
+    .on('mouseover', (d, i) => {
       // Dim all blobs
       d3.selectAll('.radarArea')
         .transition()
@@ -231,7 +221,7 @@ export function RadarChart(data, options) {
         .duration(200)
         .style('fill-opacity', 0.7)
     })
-    .on('mouseout', function() {
+    .on('mouseout', () => {
       // Bring back all blobs
       d3.selectAll('.radarArea')
         .transition()
@@ -280,14 +270,14 @@ export function RadarChart(data, options) {
     .append('circle')
     .attr('class', 'radarInvisibleCircle')
     .attr('r', cfg.dotRadius)
-    .attr('cx', function(d, i) {
+    .attr('cx', (d, i) => {
       return rScale(d.value) * Math.cos(angleSlice * i - Math.PI / 2)
     })
-    .attr('cy', function(d, i) {
+    .attr('cy', (d, i) => {
       return rScale(d.value) * Math.sin(angleSlice * i - Math.PI / 2)
     })
     .style('pointer-events', 'all')
-    .on('mouseover', function(d, i) {
+    .on('mouseover', (d, i) => {
       const newX = parseFloat(d3.select(this).attr('cx')) - 10
       const newY = parseFloat(d3.select(this).attr('cy')) - 10
 
@@ -300,7 +290,7 @@ export function RadarChart(data, options) {
         .duration(200)
         .style('opacity', 1)
     })
-    .on('mouseout', function() {
+    .on('mouseout', () => {
       tooltip
         .transition()
         .duration(200)
