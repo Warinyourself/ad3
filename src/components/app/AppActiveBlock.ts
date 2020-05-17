@@ -46,7 +46,7 @@ export default class AppActiveBlock extends Vue {
   }
 
   get isActive() {
-    return BlockModule.isActiveBlock(this.block.id)
+    return BlockModule.isActiveBlock(this.block.id) || this.block.hasActivator === false
   }
 
   clickOutside() {
@@ -54,11 +54,13 @@ export default class AppActiveBlock extends Vue {
   }
 
   mounted() {
-    BlockModule.ADD_BLOCK(this.block)
+    if (this.block.hasActivator !== false) {
+      BlockModule.ADD_BLOCK(this.block)
+    }
   }
 
   onClick() {
-    console.log('Handle click on active block')
+    this.block.on && this.block.on.click && this.block.on.click()
   }
 
   enter(element) {

@@ -51,6 +51,10 @@ export interface ModulePath {
 export interface IActiveBlock {
   id: string
   activator: string,
+  hasActivator?: boolean,
+  on?: {
+    click?: Function
+  }
   name?: string
   group?: string
   title?: string
