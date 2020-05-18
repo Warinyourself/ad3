@@ -24,6 +24,7 @@ export default class Header extends Vue {
     if (this.$route.meta.headerTitle) {
       return h('header', { class: this.classes }, [
         h('AppActiveBlock', {
+          class: 'theme-selector-block',
           props: {
             block: {
               id: 'ThemeViewBlock',

@@ -1,15 +1,23 @@
+.theme-selector-block
+  width 87vmin
+
 .theme-selection-block
   display flex
   margin-bottom 15px
+  overflow auto
 
 .theme-block
-  width 10vmin
-  height 10vmin
+  min-width 10vmin
+  min-height 10vmin
   border-radius 1vmin
   overflow hidden
   margin-right 1vmin
   display flex
   flex-direction column
+  transition .3s
+  filter brightness(75%)
+  &:hover
+    filter brightness(100%)
 
 .theme-block__color
   width 100%
