@@ -21,8 +21,8 @@ class Key extends VuexModule implements KeyState {
   }
 
   @Mutation
-  ADD_KEYBIND(keybind: IKeybind) {
-    this.keybinds.push(keybind)
+  ADD_KEYBIND(keybinds: Array<IKeybind>) {
+    this.keybinds.push(...keybinds)
   }
 
   @Mutation
@@ -42,6 +42,11 @@ class Key extends VuexModule implements KeyState {
 
     if (this.keybinds.length) {
       console.log(this.keybinds)
+      this.keybinds.forEach(keybind => {
+        if (keybind.key === key) {
+          keybind.callback()
+        }
+      })
     }
 
     if (isEscape) {
