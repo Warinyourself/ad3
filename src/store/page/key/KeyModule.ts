@@ -21,13 +21,13 @@ class Key extends VuexModule implements KeyState {
   }
 
   @Mutation
-  ADD_KEYBIND(keybinds: Array<IKeybind>) {
+  ADD_KEYBINDS(keybinds: Array<IKeybind>) {
     this.keybinds.push(...keybinds)
   }
 
   @Mutation
-  DELETE_KEYBIND(id: string) {
-    this.keybinds = this.keybinds.filter((key) => key.id !== id)
+  DELETE_KEYBINDS(ids: Array<string>) {
+    this.keybinds = this.keybinds.filter((key) => !ids.includes(key.id))
   }
 
   @Action
@@ -41,7 +41,6 @@ class Key extends VuexModule implements KeyState {
     this.SET_STATE_KEY({ key: 'lastEvent', value: { key, code: keyCode, shiftKey } })
 
     if (this.keybinds.length) {
-      console.log(this.keybinds)
       this.keybinds.forEach(keybind => {
         if (keybind.key === key) {
           keybind.callback()
