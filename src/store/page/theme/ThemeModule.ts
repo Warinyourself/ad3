@@ -108,6 +108,13 @@ class Theme extends VuexModule implements ThemeState {
       bg: '#283149'
     },
     {
+      name: '6053',
+      active: '#9dfdc7',
+      second: '#61d2b4',
+      third: '#367591',
+      bg: '#152744'
+    },
+    {
       name: '42254',
       active: '#f4f7ed',
       second: '#86ee60',
@@ -150,6 +157,13 @@ class Theme extends VuexModule implements ThemeState {
       bg: '#424874'
     },
     {
+      name: '74886',
+      active: '#fffcea',
+      second: '#a5f2e7',
+      third: '#8983f3',
+      bg: '#3a0077'
+    },
+    {
       name: '38824',
       active: '#4993fa',
       second: '#9dc6ff',
@@ -178,11 +192,18 @@ class Theme extends VuexModule implements ThemeState {
       bg: '#142850'
     },
     {
-      name: '171392',
+      name: '109078',
       active: '#00a8cc',
       second: '#ff1c76',
       third: '#91e60a',
       bg: '#142850'
+    },
+    {
+      name: '171392',
+      active: '#ffc300',
+      second: '#ec610a',
+      third: '#a40a3c',
+      bg: '#6b0848'
     },
     {
       name: 'light',
