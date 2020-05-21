@@ -107,17 +107,13 @@ export default class extends Vue {
       .attr('id', 'mainGradient')
 
     mainGradient.append('stop')
-      .attr('class', 'stop-left')
       .attr('offset', '0')
       .attr('stop-color', 'var(--color-active)')
       .attr('stop-opacity', 1)
 
-    const gradientColor = ThemeModule.isDarkTheme ? 'black' : 'rgba(255,255,255,0)'
-
     mainGradient.append('stop')
-      .attr('class', 'stop-right')
       .attr('offset', '1')
-      .attr('stop-color', gradientColor)
+      .attr('stop-color', 'var(--color-active)')
       .attr('stop-opacity', 0)
 
     svg.append('path')
