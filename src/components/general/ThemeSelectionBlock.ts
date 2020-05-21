@@ -13,22 +13,39 @@ import { keybind } from '@/plugins/mixins'
   mixins: [keybind]
 })
 export default class ThemeSelectionBlock extends Vue {
+  activeTheme = 0
+
   render(h: CreateElement): VNode {
     return h('div', { class: 'theme-selection-block', ref: 'theme' }, this.generateThemeBlocks(h))
   }
 
   generateThemeBlocks(h: CreateElement) {
-    return ThemeModule.themes.map((theme) => {
+    return ThemeModule.themes.map((theme, i) => {
       return h(ThemeBlock, {
         props: { theme },
         class: {
-          'active': true
+          'active': this.activeTheme === i
         },
         nativeOn: { click: () => ThemeModule.updateTheme(theme.name) } })
     })
   }
 
   ScrollRight() {
-    this.$refs.theme.scroll(Math.ceil(Math.random() * 10) * 100, 0)
+    if (this.activeTheme < ThemeModule.themes.length - 1) {
+      this.activeTheme++
+    }
+    const nodeSize = 103
+    this.$refs.theme.scroll((this.activeTheme - 4) * 100, 0)
+  }
+
+  ScrollLeft() {
+    if (this.activeTheme > 0) {
+      this.activeTheme--
+    }
+    this.$refs.theme.scroll((this.activeTheme - 4) * 100, 0)
+  }
+
+  SelectTheme() {
+    ThemeModule.updateTheme(ThemeModule.themes[this.activeTheme].name)
   }
 }

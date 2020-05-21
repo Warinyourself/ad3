@@ -38,7 +38,15 @@ export default class Header extends Vue {
               keybinds: [
                 {
                   key: 'ArrowLeft',
+                  callback: 'ScrollLeft'
+                },
+                {
+                  key: 'ArrowRight',
                   callback: 'ScrollRight'
+                },
+                {
+                  key: 'Enter',
+                  callback: 'SelectTheme'
                 }
               ]
             }
