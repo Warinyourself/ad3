@@ -1,5 +1,4 @@
 import { KeyModule } from '@/store/page/key/KeyModule'
-import { UtilsModule } from '@/store/utils/UtilsModule'
 
 export const keybind = {
   props: {
@@ -10,9 +9,9 @@ export const keybind = {
   },
   computed: {
     innerKeybinds() {
-      return this.keybinds.map(keybind => {
+      return this.keybinds.map((keybind, i) => {
         if (!keybind.id) {
-          keybind.id = UtilsModule.getUUID()
+          keybind.id = `${keybind.key}-${keybind.callback}-${i}`
         }
         if (typeof keybind.callback === 'string' && this[keybind.callback]) {
           keybind.callback = this[keybind.callback]
@@ -25,11 +24,12 @@ export const keybind = {
   created() {
     this.initKeybinds()
   },
+  beforeDestroy() {
+    KeyModule.DELETE_KEYBINDS(this.innerKeybinds.map(({ id }) => id))
+  },
   methods: {
     initKeybinds() {
-      KeyModule.ADD_KEYBIND(this.innerKeybinds)
-      // alert('hello')
-      console.log(this)
+      KeyModule.ADD_KEYBINDS(this.innerKeybinds)
       console.log({ keybinds: this.innerKeybinds })
       console.log('hello from mixin!')
     }
