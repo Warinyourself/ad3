@@ -51,6 +51,7 @@ export interface ModulePath {
 export interface IActiveBlock {
   id: string
   activator: string,
+  keybinds: Array<IKeybind>
   hasActivator?: boolean,
   on?: {
     click?: Function
@@ -73,4 +74,16 @@ export interface IAction {
 export interface IEventAction {
   function: Function,
   arguments?: Array<any>
+}
+
+export interface IKeybindEvent {
+  key: string
+  code: number
+  shiftKey: boolean
+}
+
+export interface IKeybind {
+  id: string
+  key: string
+  callback: Function
 }

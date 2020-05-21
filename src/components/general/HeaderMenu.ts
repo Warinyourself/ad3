@@ -4,6 +4,7 @@ import { CreateElement, VNode } from 'vue/types'
 import { PageModule } from '@/store/page/PageModule'
 import { BlockModule } from '@/store/page/block/BlockModule'
 import { ThemeModule } from '@/store/page/theme/ThemeModule'
+import { KeyModule } from '@/store/page/key/KeyModule'
 
 import ThemeSelectionBlock from '@/components/general/ThemeSelectionBlock'
 
@@ -31,7 +32,19 @@ export default class Header extends Vue {
               activator: 'T'
             }
           }
-        }, [h(ThemeSelectionBlock)]),
+        }, [
+          h(ThemeSelectionBlock, {
+            props: {
+              keybinds: [
+                {
+                  key: 'ArrowLeft',
+                  callback: 'ScrollRight'
+                }
+              ]
+            }
+          })
+        ]
+        ),
         h('div', { class: ['header-menu__block'] }, [
           !PageModule.isMainPage && h('routerLink', {
             props: { to: { name: 'index' } },
@@ -45,7 +58,8 @@ export default class Header extends Vue {
           h('routerLink', {
             class: 'ml-2 icon-3 icon--hover-main',
             props: { to: { name: 'theme' } }
-          }, [ h('AppIcon', { props: { name: 'love' } }) ])
+          }, [ h('AppIcon', { props: { name: 'love' } }) ]),
+          h('p', `Key: ${KeyModule.lastEvent.key} Code: ${KeyModule.lastEvent.code}`)
         ])
       ]
       )

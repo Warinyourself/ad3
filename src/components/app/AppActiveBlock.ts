@@ -1,12 +1,13 @@
 import { Component, Prop, Vue } from 'vue-property-decorator'
 import { CreateElement, VNode } from 'vue/types'
 
-import { IActiveBlock } from '@/types'
+import { IActiveBlock, IKeybind } from '@/types'
 import { BlockModule } from '@/store/page/block/BlockModule'
 
 @Component
 export default class AppActiveBlock extends Vue {
   @Prop({ type: Object, required: true }) block!: IActiveBlock
+  @Prop({ type: Array }) keybinds!: Array<IKeybind>
 
   get classes() {
     const classes: { [key: string]: boolean } = {
