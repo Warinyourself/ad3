@@ -236,6 +236,7 @@ class Theme extends VuexModule implements ThemeState {
       return null
     }
     const { name, ...colors } = theme
+    localStorage.setItem('theme', name)
     this.SET_STATE_THEME({ key: 'theme', value: name })
 
     ColorModule.setTheme(colors)

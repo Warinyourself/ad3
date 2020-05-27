@@ -24,6 +24,7 @@ export default class extends Vue {
   }
 
   beforeMount() {
-    ThemeModule.updateTheme('dark')
+    const theme = localStorage.getItem('theme') || 'dark'
+    ThemeModule.updateTheme(theme)
   }
 }
