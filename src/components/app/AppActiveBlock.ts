@@ -22,7 +22,12 @@ export default class AppActiveBlock extends Vue {
   }
 
   render(h: CreateElement): VNode {
-    return h('div', { class: this.classes }, [
+    return h('div', {
+      class: this.classes,
+      on: {
+        click: this.onClick
+      }
+    }, [
       h('transition', {
         props: { name: 'expand' },
         on: {
@@ -30,13 +35,8 @@ export default class AppActiveBlock extends Vue {
           afterEnter: this.afterEnter,
           leave: this.leave
         }
-      }, [
-        this.isActive && h('div', {
-          on: {
-            click: this.onClick
-          }
-        }, this.$slots.default)
-      ])
+      }, [this.isActive && this.$slots.default]
+      )
     ])
   }
 
