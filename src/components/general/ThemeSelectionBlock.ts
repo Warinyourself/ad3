@@ -30,6 +30,11 @@ export default class ThemeSelectionBlock extends Vue {
     })
   }
 
+  mounted() {
+    this.activeTheme = ThemeModule.themes.findIndex(({ name }) => name === ThemeModule.theme)
+    this.$refs.theme.scroll((this.activeTheme - 4) * 100, 0)
+  }
+
   ScrollRight() {
     if (this.activeTheme < ThemeModule.themes.length - 1) {
       this.activeTheme++

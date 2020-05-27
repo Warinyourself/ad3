@@ -67,7 +67,10 @@ export default class Header extends Vue {
             class: 'ml-2 icon-3 icon--hover-main',
             props: { to: { name: 'theme' } }
           }, [ h('AppIcon', { props: { name: 'love' } }) ]),
-          h('p', `Key: ${KeyModule.lastEvent.key} Code: ${KeyModule.lastEvent.code}`)
+          (
+            Object.keys(KeyModule.lastEvent).length &&
+            h('p', { class: 'ml-2' }, `Key: ${KeyModule.lastEvent.key} Code: ${KeyModule.lastEvent.code}`)
+          ) || null
         ])
       ]
       )

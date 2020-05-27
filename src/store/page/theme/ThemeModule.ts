@@ -573,13 +573,9 @@ class Theme extends VuexModule implements ThemeState {
 
   @Action
   updateTheme(themeName: string) {
-    const theme = this.themes.find(theme => theme.name === themeName)
-    if (!theme) {
-      console.error('Not found theme')
-      return null
-    }
-
+    const theme = this.themes.find(theme => theme.name === themeName) || this.themes[0]
     const { name, ...colors } = theme
+
     localStorage.setItem('theme', name)
     this.SET_STATE_THEME({ key: 'theme', value: name })
 
