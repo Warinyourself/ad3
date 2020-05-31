@@ -1,14 +1,14 @@
 import * as d3 from 'd3'
 import { animate } from '@/utils/animation'
 
-interface IMargin {
+export interface IMargin {
   top: number
   right: number
   bottom: number
   left: number
 }
 
-interface IGridSettings {
+export interface GridOptions {
   margin: IMargin
   width: number
   height: number
@@ -20,24 +20,24 @@ interface IGridSettings {
   color?: string
 }
 
-interface ILineSettings {
+export interface ILineSettings {
   position: [number | null, number | null, number | null, number | null]
   attrs: Array<[string, string]>
 }
 
-interface ILinePosition {
+export interface ILinePosition {
   x: number
   y: number
 }
 
-interface IUpdateLinePosition {
+export interface IUpdateLinePosition {
   animationCallback: (progress: number) => any,
   position: ILinePosition,
   svg: any
   duration: number
 }
 
-export function generateGrid(gridSettings: IGridSettings) {
+export function generateGrid(gridSettings: GridOptions) {
   const { margin, height, width, x, y, opacity, color, xLines, yLines } = gridSettings
 
   const grid = (g: any) => {

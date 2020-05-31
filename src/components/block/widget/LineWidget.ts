@@ -2,8 +2,7 @@ import { Component, Prop, Vue } from 'vue-property-decorator'
 import { CreateElement, VNode } from 'vue/types'
 
 import * as d3 from 'd3'
-import { generateAxis } from '@/utils/d3/axis'
-import { generateGrid, generateLine, initLinePosition } from '@/utils/d3/line'
+import { generateAxis, generateData, generateGrid, generateLine, initLinePosition } from '@/utils/d3'
 
 @Component({
   name: 'LineWidget'
@@ -35,7 +34,7 @@ export default class extends Vue {
       .attr('height', height)
       .append('g')
 
-    const data = this.generateChartData()
+    const data = generateData({ max: 18 })
 
     const [x, xAxis] = generateAxis({
       ticks: data.length < 15 ? data.length : 10,

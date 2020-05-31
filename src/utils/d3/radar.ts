@@ -1,6 +1,6 @@
 import * as d3 from 'd3'
 
-export function RadarChart(data, options) {
+export function generateRadar(data, options) {
   function wrap(text, width) {
     text.each(function() {
       let text = d3.select(this)

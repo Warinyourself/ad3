@@ -2,13 +2,11 @@ import { Component, Prop, Vue } from 'vue-property-decorator'
 import { IWidgetBlock } from '@/types'
 
 import { CreateElement, VNode } from 'vue/types'
-import { RadarChart } from '@/utils/d3/radar'
+import { generateRadar } from '@/utils/d3/index'
 import * as d3 from 'd3'
 
-@Component({
-  name: 'PieWidget'
-})
-export default class extends Vue {
+@Component
+export default class PieWidget extends Vue {
   render(h: CreateElement): VNode {
     return h('svg', { ref: 'svgChart', class: ['chart-pie'] })
   }
@@ -74,6 +72,6 @@ export default class extends Vue {
       color: color
     }
 
-    const radar = RadarChart(data, radarChartOptions)
+    generateRadar(data, radarChartOptions)
   }
 }

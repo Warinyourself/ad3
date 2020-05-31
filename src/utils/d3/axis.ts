@@ -1,6 +1,6 @@
 import * as d3 from 'd3'
 
-interface IAxisSettings {
+export interface AxisOptions {
   domain: [number, number]
   range: [number, number]
   ticks: number
@@ -9,8 +9,8 @@ interface IAxisSettings {
   domainOffset?: number
 }
 
-export function generateAxis(axiosSettings: IAxisSettings): [d3.ScaleLinear<number, number>, (g: any) => any, [number, number]] {
-  let { domain, range, ticks, translate, domainOffset, type } = axiosSettings
+export function generateAxis(options: AxisOptions): [d3.ScaleLinear<number, number>, (g: any) => any, [number, number]] {
+  let { domain, range, ticks, translate, domainOffset, type } = options
 
   if (domainOffset) {
     domain = [domain[0] - domain[1] * domainOffset, domain[1] + domain[1] * domainOffset]
