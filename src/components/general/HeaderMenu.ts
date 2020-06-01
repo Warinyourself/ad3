@@ -37,11 +37,11 @@ export default class Header extends Vue {
             props: {
               keybinds: [
                 {
-                  key: 'ArrowLeft',
+                  key: 'ArrowLeft | j',
                   callback: 'ScrollLeft'
                 },
                 {
-                  key: 'ArrowRight',
+                  key: 'ArrowRight | k',
                   callback: 'ScrollRight'
                 },
                 {

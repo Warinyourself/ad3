@@ -4,6 +4,7 @@ import { BlockModule } from '@/store/page/block/BlockModule'
 import { IKeybindEvent, IKeybind } from '@/types'
 
 import store from '@/store'
+import { Prop } from 'vue-property-decorator'
 
 export interface KeyState {
   keybinds: Array<IKeybind>
@@ -14,6 +15,12 @@ export interface KeyState {
 class Key extends VuexModule implements KeyState {
   keybinds: Array<IKeybind> = []
   lastEvent = {} as IKeybindEvent
+
+  get parseKey() {
+    return (key: string) => {
+      return key.split('|').map(key => key.trim())
+    }
+  }
 
   @Mutation
   SET_STATE_KEY<S extends this, K extends keyof this>({ key, value }: { key: K, value: S[K] }) {
@@ -42,7 +49,9 @@ class Key extends VuexModule implements KeyState {
 
     if (this.keybinds.length) {
       this.keybinds.forEach(keybind => {
-        if (keybind.key === key) {
+        const keys = this.parseKey(keybind.key)
+
+        if (keys.includes(key)) {
           keybind.callback()
         }
       })
