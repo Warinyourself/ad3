@@ -4,6 +4,7 @@ import { generateData } from './data'
 import { generateRadar } from './radar'
 import { generateAxis, AxisOptions } from './axis'
 import { generateLine, initLinePosition, generateGrid, GridOptions, IMargin } from './line'
+import { generateTooltip } from './tooltip'
 
 export { generateRadar, generateAxis, generateData, generateLine, initLinePosition, generateGrid }
 
@@ -82,6 +83,62 @@ export class AD3 {
         .attr('stroke', 'var(--color-active)')
         .attr('stroke-width', 1.5)
         .attr('d', path)
+
+      const body = ctx.append('rect')
+        .attr('width', width - margin.left - margin.right)
+        .attr('height', height - margin.top - margin.bottom)
+        .attr('x', margin.left)
+        .attr('y', margin.top)
+        .attr('opacity', 0)
+
+      const { lineY, lineX, picker } = generateTooltip({ width, height, margin })
+
+      ctxCall(lineY)
+      ctxCall(lineX)
+
+      if (picker) {
+        ctxCall(picker)
+      }
+
+      const bisect = (() => {
+        const bisect = d3.bisector((d: any) => d.index).right
+
+        return (mx: any) => {
+          const value = x.invert(mx)
+          const index = bisect(data, value, 1)
+
+          const a = data[index - 1]
+          const b = data[index]
+          return value - a.value > b.value - value ? b : a
+        }
+      })()
+
+      const updateLinePosition = initLinePosition()
+
+      body.on('mouseenter', () => {
+        ctx.selectAll('#pointer, #tooltip-line-x, #tooltip-line-y')
+          .transition()
+          .duration(200)
+          .style('opacity', 1)
+      }).on('mousemove', () => {
+        const { index, value } = bisect(d3.event.offsetX)
+        const position = { x: x(index), y: y(value) }
+
+        updateLinePosition({
+          animationCallback: (progress: number) => console.log({ progress }, 'progress'),
+          position,
+          duration: 400,
+          svg: ctx
+        })
+
+        ctx.select('#pointer')
+          .attr('transform', `translate(${position.x}, ${position.y})`)
+      }).on('mouseleave', () => {
+        ctx.selectAll('#pointer, #tooltip-line-x, #tooltip-line-y')
+          .transition()
+          .duration(200)
+          .style('opacity', 0)
+      })
     }
   }
 }

@@ -1,8 +1,7 @@
 import { Component, Prop, Vue } from 'vue-property-decorator'
 import { CreateElement, VNode } from 'vue/types'
 
-import * as d3 from 'd3'
-import { AD3, generateAxis, generateData, generateGrid, generateLine, initLinePosition, ad3 } from '@/utils/d3'
+import { AD3, generateData } from '@/utils/d3'
 
 @Component({
   name: 'LineWidget'
