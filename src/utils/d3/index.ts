@@ -84,13 +84,6 @@ export class AD3 {
         .attr('stroke-width', 1.5)
         .attr('d', path)
 
-      const body = ctx.append('rect')
-        .attr('width', width - margin.left - margin.right)
-        .attr('height', height - margin.top - margin.bottom)
-        .attr('x', margin.left)
-        .attr('y', margin.top)
-        .attr('opacity', 0)
-
       const { lineY, lineX, picker } = generateTooltip({ width, height, margin })
 
       ctxCall(lineY)
@@ -100,18 +93,12 @@ export class AD3 {
         ctxCall(picker)
       }
 
-      const bisect = (() => {
-        const bisect = d3.bisector((d: any) => d.index).right
-
-        return (mx: any) => {
-          const value = x.invert(mx)
-          const index = bisect(data, value, 1)
-
-          const a = data[index - 1]
-          const b = data[index]
-          return value - a.value > b.value - value ? b : a
-        }
-      })()
+      const body = ctx.append('rect')
+        .attr('width', width - margin.left - margin.right)
+        .attr('height', height - margin.top - margin.bottom)
+        .attr('x', margin.left)
+        .attr('y', margin.top)
+        .attr('opacity', 0)
 
       const updateLinePosition = initLinePosition()
 
@@ -121,7 +108,8 @@ export class AD3 {
           .duration(200)
           .style('opacity', 1)
       }).on('mousemove', () => {
-        const { index, value } = bisect(d3.event.offsetX)
+        const centerIndex = Math.round(x.invert(d3.event.offsetX))
+        const { index, value } = data[centerIndex]
         const position = { x: x(index), y: y(value) }
 
         updateLinePosition({

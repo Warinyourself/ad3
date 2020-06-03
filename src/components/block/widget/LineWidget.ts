@@ -13,16 +13,6 @@ export default class extends Vue {
     return h('svg', { ref: 'svgChart' })
   }
 
-  generateChartData() {
-    const amountItems = Math.floor(Math.random() * 30) + 10
-    return Array.from(Array(amountItems)).map((_, index) => {
-      return {
-        value: Math.floor(Math.random() * 35) + 10,
-        index
-      }
-    })
-  }
-
   mounted() {
     const margin = { top: 20, right: 30, bottom: 30, left: 40 }
     const node = this.$refs.svgChart as HTMLElement
@@ -31,7 +21,7 @@ export default class extends Vue {
 
     const chart = new AD3(node, {
       type: 'line',
-      data: generateData({ max: 18 }),
+      data: generateData({ max: 28, length: 7 }),
       options: {
         grid: true,
         height,
