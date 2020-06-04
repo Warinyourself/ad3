@@ -114,15 +114,14 @@ export class AD3 {
       body.on('mouseenter', () => {
         ctx.selectAll('#pointer, #tooltip-line-x, #tooltip-line-y')
           .transition()
-          .duration(200)
           .style('opacity', 1)
+          .duration(200)
       }).on('mousemove', () => {
         const centerIndex = Math.round(x.invert(d3.event.offsetX))
         const { index, value } = data[centerIndex]
         const position = { x: x(index), y: y(value) }
 
         updateLinePosition({
-          animationCallback: (progress: number) => console.log({ progress }, 'progress'),
           position,
           duration: 400,
           svg: ctx
@@ -133,8 +132,8 @@ export class AD3 {
       }).on('mouseleave', () => {
         ctx.selectAll('#pointer, #tooltip-line-x, #tooltip-line-y')
           .transition()
-          .duration(200)
           .style('opacity', 0)
+          .duration(200)
       })
     }
   }

@@ -31,7 +31,7 @@ export interface ILinePosition {
 }
 
 export interface IUpdateLinePosition {
-  animationCallback: (progress: number) => any,
+  animationCallback?: (progress: number) => any,
   position: ILinePosition,
   svg: any
   duration: number
@@ -116,19 +116,36 @@ export function initLinePosition() {
     if (oldPosition.x !== position.x) {
       oldPosition = position
 
-      animate({
-        duration: 400,
-        timing: (time: number) => time,
-        draw: (progress: number) => {
-          generateTransition('x', progress, position, svg)
-          generateTransition('y', progress, position, svg)
-        }
-      })
+      // animate({
+      //   duration: 400,
+      //   timing: (time: number) => time,
+      //   draw: (progress: number) => {
+      //     generateTransition('x', progress, position, svg)
+      //     generateTransition('y', progress, position, svg)
+      //   }
+      // })
+
+      generateTransition('y', position, svg)
+      generateTransition('x', position, svg)
     }
   }
 }
 
-const generateTransition = (path: 'x' | 'y', progress: number, position: ILinePosition, svg: any) => {
+const generateTransition = (path: 'x' | 'y', position: ILinePosition, svg: any) => {
+  const line = svg.select(`#tooltip-line-${path}`)
+  const start = parseInt(line.attr(`${path}1`)) || 0
+
+  line
+    .transition()
+    .attr(`${path}1`, start)
+    .attr(`${path}2`, start)
+    .ease(d3.easeLinear)
+    .attr(`${path}1`, position[path])
+    .attr(`${path}2`, position[path])
+    .duration(500)
+}
+
+const generateTransitionOld = (path: 'x' | 'y', progress: number, position: ILinePosition, svg: any) => {
   const line = svg.select(`#tooltip-line-${path}`)
   const start = parseInt(line.attr(`${path}1`)) || 0
   line
