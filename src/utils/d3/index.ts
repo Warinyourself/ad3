@@ -72,17 +72,26 @@ export class AD3 {
         ctxCall(gridCall)
       }
 
-      const path: any = d3.line()
+      const line = d3.line()
         .x((_, i) => x(i))
         .y((d: any) => y(d.value))
         .curve(d3.curveCardinal)
 
-      ctx.append('path')
+      const path = ctx.append('path')
         .datum(data)
         .attr('fill', 'none')
         .attr('stroke', 'var(--color-active)')
         .attr('stroke-width', 1.5)
-        .attr('d', path)
+        .attr('d', line)
+
+      let length = path.node().getTotalLength()
+
+      path.attr('stroke-dasharray', length + ' ' + length)
+        .attr('stroke-dashoffset', length)
+        .transition()
+        .ease(d3.easeLinear)
+        .attr('stroke-dashoffset', 0)
+        .duration(2000)
 
       const { lineY, lineX, picker } = generateTooltip({ width, height, margin })
 

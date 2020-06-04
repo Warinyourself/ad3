@@ -45,7 +45,7 @@ export default class Header extends Vue {
                   callback: 'ScrollRight'
                 },
                 {
-                  key: 'Enter',
+                  key: 'Enter | o',
                   callback: 'SelectTheme'
                 }
               ]
