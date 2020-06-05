@@ -3,7 +3,7 @@ import { CreateElement, VNode } from 'vue/types'
 
 import * as d3 from 'd3'
 import { generateAxis } from '@/utils/d3/axis'
-import { generateGrid, generateLine, initLinePosition } from '@/utils/d3/line'
+import { generateGrid } from '@/utils/d3/line'
 
 @Component({
   name: 'HistogramWidget'

@@ -67,7 +67,7 @@ export class AD3 {
       ctxCall(xAxis)
       ctxCall(yAxis)
 
-      if (grid === true) {
+      if (grid) {
         const gridCall = generateGrid({ width, height, margin, y, yLines: yTicks })
         ctxCall(gridCall)
       }
@@ -77,6 +77,13 @@ export class AD3 {
         .y((d: any) => y(d.value))
         .curve(d3.curveCardinal)
 
+      const pathSeg = ctx.append('path')
+        .datum(data)
+        .attr('id', 'path-seg-sine')
+        .attr('fill', 'none')
+        .attr('stroke-width', 2)
+        .attr('stroke', 'none')
+
       const path = ctx.append('path')
         .datum(data)
         .attr('fill', 'none')
@@ -84,6 +91,7 @@ export class AD3 {
         .attr('stroke-width', 1.5)
         .attr('d', line)
 
+      // Animation path view
       let length = path.node().getTotalLength()
 
       path.attr('stroke-dasharray', length + ' ' + length)
@@ -93,13 +101,14 @@ export class AD3 {
         .attr('stroke-dashoffset', 0)
         .duration(2000)
 
-      const { lineY, lineX, picker } = generateTooltip({ width, height, margin })
+      const { lineY, lineX, picker: pickerGroup } = generateTooltip({ width, height, margin })
+      let marker = {}
 
       ctxCall(lineY)
       ctxCall(lineX)
 
-      if (picker) {
-        ctxCall(picker)
+      if (pickerGroup) {
+        marker = ctxCall(pickerGroup)
       }
 
       const body = ctx.append('rect')
@@ -113,9 +122,9 @@ export class AD3 {
 
       body.on('mouseenter', () => {
         ctx.selectAll('#pointer, #tooltip-line-x, #tooltip-line-y')
-          .transition()
+          // .transition()
           .style('opacity', 1)
-          .duration(200)
+          // .duration(200)
       }).on('mousemove', () => {
         const centerIndex = Math.round(x.invert(d3.event.offsetX))
         const { index, value } = data[centerIndex]
@@ -127,14 +136,60 @@ export class AD3 {
           svg: ctx
         })
 
-        ctx.select('#pointer')
-          .attr('transform', `translate(${position.x}, ${position.y})`)
+        update({ data, line, pathSeg, marker, position: index })
+        // ctx.select('#pointer')
+        //   .attr('transform', `translate(${position.x}, ${position.y})`)
       }).on('mouseleave', () => {
         ctx.selectAll('#pointer, #tooltip-line-x, #tooltip-line-y')
-          .transition()
+          // .transition()
           .style('opacity', 0)
-          .duration(200)
+          // .duration(200)
       })
+    }
+  }
+}
+
+let point = -2 * Math.PI
+
+// Updates position of marker.
+function update({ data, line, pathSeg, marker, position: nextPoint }) {
+  // Only include points between existing and new point.
+  console.log({ point, nextPoint })
+
+  if (point === nextPoint) {
+    return
+  }
+
+  line.defined((d, i) =>
+    // eslint-disable-next-line no-mixed-operators
+    i <= nextPoint && i >= point || i <= point && i >= nextPoint
+  )
+
+  // Update path.
+  pathSeg.attr('d', line)
+  // Transition marker from point to nextPoint.
+  marker.transition().duration(1500)
+    .attrTween('transform', nextPoint > point ? translateRight(pathSeg.node()) : translateLeft(pathSeg.node()))
+    .on('end', () => { point = nextPoint })
+}
+
+// Tween function for moving to right.
+function translateRight(node) {
+  const l = node.getTotalLength()
+  return () => {
+    return (t) => {
+      const p = node.getPointAtLength(t * l)
+      return 'translate(' + p.x + ',' + p.y + ')'
+    }
+  }
+}
+// Tween function for moving to left.
+function translateLeft(node) {
+  const l = node.getTotalLength()
+  return () => {
+    return (t) => {
+      const p = node.getPointAtLength((1 - t) * l)
+      return 'translate(' + p.x + ',' + p.y + ')'
     }
   }
 }

@@ -142,7 +142,7 @@ const generateTransition = (path: 'x' | 'y', position: ILinePosition, svg: any) 
     .ease(d3.easeLinear)
     .attr(`${path}1`, position[path])
     .attr(`${path}2`, position[path])
-    .duration(500)
+    .duration(300)
 }
 
 const generateTransitionOld = (path: 'x' | 'y', progress: number, position: ILinePosition, svg: any) => {

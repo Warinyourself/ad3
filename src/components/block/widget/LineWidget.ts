@@ -21,7 +21,7 @@ export default class extends Vue {
 
     const chart = new AD3(node, {
       type: 'line',
-      data: generateData({ max: 28, length: 7 }),
+      data: generateData({ max: 12 }),
       options: {
         grid: true,
         height,
