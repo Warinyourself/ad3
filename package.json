@@ -20,12 +20,7 @@
     "vuex": "^3.1.2"
   },
   "devDependencies": {
-    "dotenv": "^8.2.0",
-    "stylus": "^0.54.7",
-    "stylus-loader": "^3.0.2",
-    "vue-class-component": "^7.2.2",
-    "vuex-module-decorators": "^0.16.1",
-    "vue-property-decorator": "^8.4.0",
+    "@babel/plugin-proposal-optional-chaining": "^7.10.1",
     "@types/d3": "^5.7.2",
     "@types/jest": "^24.0.19",
     "@typescript-eslint/eslint-plugin": "^2.18.0",
@@ -42,11 +37,17 @@
     "@vue/eslint-config-standard": "^4.0.0",
     "@vue/eslint-config-typescript": "^5.0.1",
     "@vue/test-utils": "1.0.0-beta.31",
+    "dotenv": "^8.2.0",
     "eslint": "^6.7.2",
     "eslint-plugin-import": "^2.20.1",
     "eslint-plugin-vue": "^6.1.2",
+    "stylus": "^0.54.7",
+    "stylus-loader": "^3.0.2",
     "ts-node-dev": "^1.0.0-pre.44",
     "typescript": "^3.7.5",
-    "vue-template-compiler": "^2.6.11"
+    "vue-class-component": "^7.2.2",
+    "vue-property-decorator": "^8.4.0",
+    "vue-template-compiler": "^2.6.11",
+    "vuex-module-decorators": "^0.16.1"
   }
 }
