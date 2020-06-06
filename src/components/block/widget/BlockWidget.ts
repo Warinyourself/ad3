@@ -37,7 +37,7 @@ export default class extends Vue {
       is: this.block.component,
       key: ThemeModule.theme,
       props: {
-        settings: this.block
+        settings: this.block.chartSettings || {}
       }
     })
     if ((child as any).tag === this.block.component) {

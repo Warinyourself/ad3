@@ -9,22 +9,18 @@ import * as d3 from 'd3'
   name: 'ArcWidget'
 })
 export default class extends Vue {
-  @Prop() settings!: IWidgetBlock & { chartSettings: IChartPieSetting };
+  @Prop() settings!: IChartPieSetting;
 
   innerValue: number = 0
 
-  get chartSettings() {
-    return this.settings.chartSettings
-  }
-
   get value() {
-    const handle: Function = this.chartSettings.computeValue || ((value: number) => value)
-    const value = this.innerValue || this.chartSettings.value.current
+    const handle: Function = this.settings.computeValue || ((value: number) => value)
+    const value = this.innerValue || this.settings.value.current
     return handle(value)
   }
 
   get percent() {
-    const { current, min, max } = this.chartSettings.value
+    const { current, min, max } = this.settings.value
     const onePercent = ((max || 100) - (min || 0)) / 100
     return this.value / onePercent
   }
@@ -38,7 +34,7 @@ export default class extends Vue {
   }
 
   generateValue() {
-    return Math.floor(Math.random() * (this.chartSettings.value.max || 100) - (this.chartSettings.value.min || 0))
+    return Math.floor(Math.random() * (this.settings.value.max || 100) - (this.settings.value.min || 0))
   }
 
   async initPieChart() {
@@ -78,7 +74,7 @@ export default class extends Vue {
       .attr('dx', 0)
 
     let textValue = this.value || this.percent || 0
-    const pre = this.chartSettings.pre || 'C°'
+    const pre = this.settings.pre || 'C°'
 
     let text = svg.append('text')
       .datum(textValue)
@@ -87,8 +83,8 @@ export default class extends Vue {
       .attr('dy', 20)
       .attr('dx', '0')
 
-    let color = this.chartSettings.color || 'var(--color-second)'
-    let title = this.chartSettings.title || 'temperature'
+    let color = this.settings.color || 'var(--color-second)'
+    let title = this.settings.title || 'temperature'
     path.attr('style', `fill: ${color}`)
 
     titleText.text(title + ':')
