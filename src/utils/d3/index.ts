@@ -11,10 +11,12 @@ export { generateRadar, generateAxis, generateData, generateLine, initLinePositi
 
 type ChartTypes = 'line' | 'bar' | 'area' | 'radar' | 'pie' | 'arc' | 'chord'
 
+type CurveLine = 'curveCardinal' | 'curveCardinalClosed' | 'curveCardinalOpen' | 'curveCatmullRom' | 'curveCatmullRomClosed' | 'curveCatmullRomOpen' | 'curveLinear' | 'curveLinearClosed' | 'curveMonotoneX' | 'curveMonotoneY' | 'curveStep' | 'curveStepAfter' | 'curveStepBefore'
+
 interface LineOption {
   color?: string
   width?: number | string
-  type?: string
+  curve?: CurveLine
   attrs?: Array<[string, string]>
 }
 
@@ -87,28 +89,25 @@ export class AD3 {
       }
 
       if (isDeepStructure) {
-        data.forEach((element, i) => {
+        data.forEach((element: any, i: number) => {
           const isSeveralLines = Array.isArray(options?.line)
+          const lineMain: LineOption = isSeveralLines ? (options?.line as LineOption[])[i] || {} : (options?.line as LineOption) || {}
+          const lineOptions = {
+            color: lineMain.color || 'var(--color-active)',
+            width: lineMain.width || 1.5,
+            curve: lineMain.curve || 'curveCardinal'
+          }
+
           const line = d3.line()
             .x((_, i) => x(i))
             .y((d: any) => y(d.value))
-            .curve(d3.curveCardinal)
+            .curve(d3[lineOptions.curve])
 
           const path = ctx.append('path')
             .datum(element)
             .attr('fill', 'none')
-            .attr('stroke', () => {
-              let stroke
-
-              if (isSeveralLines) {
-                stroke = ((options?.line as LineOption[])[i] || {}).color
-              } else {
-                stroke = (options?.line as LineOption).color
-              }
-
-              return stroke || 'var(--color-active)'
-            })
-            .attr('stroke-width', 1.5)
+            .attr('stroke', lineOptions.color)
+            .attr('stroke-width', lineOptions.width)
             .attr('d', line)
 
           // Animation path view

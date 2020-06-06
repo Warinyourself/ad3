@@ -17,12 +17,23 @@ export default class ChartPage extends Vue {
     id: 1,
     title: 'Chart widget',
     component: 'LineWidget',
-    size: [3, 1],
+    size: [5, 2],
     url: '/chart',
     chartSettings: {
-      data: generateData({ max: 12 }),
+      data: generateData({ max: 12, sets: 3 }),
       options: {
-        grid: true
+        grid: true,
+        line: [
+          {
+            color: 'var(--color-second)',
+            width: 4,
+            curve: 'curveStepAfter'
+          },
+          {
+            color: 'var(--color-third)',
+            width: 3
+          }
+        ]
       }
     }
   }
