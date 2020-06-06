@@ -116,15 +116,6 @@ export function initLinePosition() {
     if (oldPosition.x !== position.x) {
       oldPosition = position
 
-      // animate({
-      //   duration: 400,
-      //   timing: (time: number) => time,
-      //   draw: (progress: number) => {
-      //     generateTransition('x', progress, position, svg)
-      //     generateTransition('y', progress, position, svg)
-      //   }
-      // })
-
       generateTransition('y', position, svg)
       generateTransition('x', position, svg)
     }

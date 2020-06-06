@@ -23,10 +23,10 @@ export default class extends Vue {
       type: 'line',
       data: generateData({ max: 12 }),
       options: {
-        grid: true,
         height,
         width,
-        margin
+        margin,
+        ...this.settings.options
       }
     })
   }
