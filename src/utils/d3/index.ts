@@ -5,10 +5,18 @@ import { generateRadar } from './radar'
 import { generateAxis, AxisOptions } from './axis'
 import { generateLine, initLinePosition, generateGrid, GridOptions, IMargin } from './line'
 import { generateTooltip } from './tooltip'
+import { Line } from 'd3'
 
 export { generateRadar, generateAxis, generateData, generateLine, initLinePosition, generateGrid }
 
 type ChartTypes = 'line' | 'bar' | 'area' | 'radar' | 'pie' | 'arc' | 'chord'
+
+interface LineOption {
+  color?: string
+  width?: number | string
+  type?: string
+  attrs?: Array<[string, string]>
+}
 
 interface ConstructorAD3 {
   type: ChartTypes,
@@ -18,6 +26,7 @@ interface ConstructorAD3 {
     height?: number
     margin?: IMargin
     grid?: GridOptions | boolean
+    line: LineOption | Array<LineOption>
     axes?: {
       x?: AxisOptions
       y?: AxisOptions
@@ -46,19 +55,24 @@ export class AD3 {
       .append('g')
 
     if (type === 'line') {
-      console.log({ data, width, height, margin, ctx })
+      const isDeepStructure = Array.isArray(data[0])
+
+      console.log({ isDeepStructure, data, width, height, margin, ctx })
+
+      const dataLength = isDeepStructure ? data[0].length : data.length
       const [x, xAxis] = generateAxis({
-        ticks: data.length < 15 ? data.length : 10,
-        domain: [0, data.length - 1],
+        ticks: dataLength < 15 ? dataLength : 10,
+        domain: [0, dataLength - 1],
         range: [margin.left, width - margin.right],
         translate: `translate(0, ${height - margin.bottom})`
       })
 
-      const yTicks = data.length < 6 ? data.length : 6
+      const yTicks = dataLength < 6 ? dataLength : 6
+
       const [y, yAxis] = generateAxis({
         type: 'axisLeft',
         ticks: yTicks,
-        domain: d3.extent(data, d => d.value) as [number, number],
+        domain: d3.extent(isDeepStructure ? data.flat() : data, d => d.value) as [number, number],
         domainOffset: 0.2,
         range: [height - margin.bottom, margin.top],
         translate: `translate(${margin.left}, 0)`
@@ -72,27 +86,64 @@ export class AD3 {
         ctxCall(gridCall)
       }
 
-      const line = d3.line()
-        .x((_, i) => x(i))
-        .y((d: any) => y(d.value))
-        .curve(d3.curveCardinal)
+      if (isDeepStructure) {
+        data.forEach((element, i) => {
+          const isSeveralLines = Array.isArray(options?.line)
+          const line = d3.line()
+            .x((_, i) => x(i))
+            .y((d: any) => y(d.value))
+            .curve(d3.curveCardinal)
 
-      const path = ctx.append('path')
-        .datum(data)
-        .attr('fill', 'none')
-        .attr('stroke', 'var(--color-active)')
-        .attr('stroke-width', 1.5)
-        .attr('d', line)
+          const path = ctx.append('path')
+            .datum(element)
+            .attr('fill', 'none')
+            .attr('stroke', () => {
+              let stroke
 
-      // Animation path view
-      let length = path.node().getTotalLength()
+              if (isSeveralLines) {
+                stroke = ((options?.line as LineOption[])[i] || {}).color
+              } else {
+                stroke = (options?.line as LineOption).color
+              }
 
-      path.attr('stroke-dasharray', length + ' ' + length)
-        .attr('stroke-dashoffset', length)
-        .transition()
-        .ease(d3.easeLinear)
-        .attr('stroke-dashoffset', 0)
-        .duration(2000)
+              return stroke || 'var(--color-active)'
+            })
+            .attr('stroke-width', 1.5)
+            .attr('d', line)
+
+          // Animation path view
+          let length = path.node().getTotalLength()
+
+          path.attr('stroke-dasharray', length + ' ' + length)
+            .attr('stroke-dashoffset', length)
+            .transition()
+            .ease(d3.easeLinear)
+            .attr('stroke-dashoffset', 0)
+            .duration(2000)
+        })
+      } else {
+        const line = d3.line()
+          .x((_, i) => x(i))
+          .y((d: any) => y(d.value))
+          .curve(d3.curveCardinal)
+
+        const path = ctx.append('path')
+          .datum(data)
+          .attr('fill', 'none')
+          .attr('stroke', 'var(--color-active)')
+          .attr('stroke-width', 1.5)
+          .attr('d', line)
+
+        // Animation path view
+        let length = path.node().getTotalLength()
+
+        path.attr('stroke-dasharray', length + ' ' + length)
+          .attr('stroke-dashoffset', length)
+          .transition()
+          .ease(d3.easeLinear)
+          .attr('stroke-dashoffset', 0)
+          .duration(2000)
+      }
 
       const { lineY, lineX, picker: pickerGroup, animate } = generateTooltip({ width, height, margin })
       let marker = {}
@@ -114,12 +165,10 @@ export class AD3 {
 
       body.on('mouseenter', () => {
         ctx.selectAll('#pointer, #tooltip-line-x, #tooltip-line-y')
-          // .transition()
           .style('opacity', 1)
-          // .duration(200)
       }).on('mousemove', () => {
         const centerIndex = Math.round(x.invert(d3.event.offsetX))
-        const { index, value } = data[centerIndex]
+        const { index, value } = data[0][centerIndex]
         const position = { x: x(index), y: y(value) }
 
         marker.style.transform = `translate(${position.x}px, ${position.y}px)`
