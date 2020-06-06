@@ -31,7 +31,8 @@ class Settings extends VuexModule implements SettingsState {
       id: UtilsModule.getUUID(),
       title: 'Chart widget',
       component: 'LineWidget',
-      size: [3, 1]
+      size: [3, 1],
+      url: '/chart'
     },
     {
       id: UtilsModule.getUUID(),

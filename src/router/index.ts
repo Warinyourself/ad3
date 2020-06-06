@@ -3,6 +3,7 @@ import VueRouter, { RouteConfig, Route } from 'vue-router'
 
 import IndexPage from '@/views/IndexPage'
 import ThemePage from '@/views/ThemePage'
+import ChartPage from '@/views/ChartPage'
 import NotFoundPage from '@/views/NotFoundPage'
 
 import { PageModule } from '@/store/page/PageModule'
@@ -25,6 +26,14 @@ const routes: Array<TAppRoute> = [
     component: IndexPage,
     meta: {
       headerTitle: 'Main Page'
+    }
+  },
+  {
+    path: '/chart',
+    name: 'chart',
+    component: ChartPage,
+    meta: {
+      headerTitle: 'Chart Page'
     }
   },
   {
