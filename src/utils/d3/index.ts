@@ -5,6 +5,7 @@ import { generateRadar } from './radar'
 import { generateAxis, AxisOptions } from './axis'
 import { generateLine, initLinePosition, generateGrid, GridOptions, IMargin } from './line'
 import { generateTooltip } from './tooltip'
+import { generateFilter, GenerateFilterOptions } from './filter'
 import { Line } from 'd3'
 
 export { generateRadar, generateAxis, generateData, generateLine, initLinePosition, generateGrid }
@@ -18,6 +19,7 @@ interface LineOption {
   width?: number | string
   curve?: CurveLine
   attrs?: Array<[string, string]>
+  filter: string | GenerateFilterOptions
 }
 
 interface ConstructorAD3 {
@@ -59,7 +61,7 @@ export class AD3 {
     if (type === 'line') {
       const isDeepStructure = Array.isArray(data[0])
 
-      console.log({ isDeepStructure, data, width, height, margin, ctx })
+      // console.log({ isDeepStructure, data, width, height, margin, ctx })
 
       const dataLength = isDeepStructure ? data[0].length : data.length
       const [x, xAxis] = generateAxis({
@@ -95,7 +97,8 @@ export class AD3 {
           const lineOptions = {
             color: lineMain.color || 'var(--color-active)',
             width: lineMain.width || 1.5,
-            curve: lineMain.curve || 'curveCardinal'
+            curve: lineMain.curve || 'curveCardinal',
+            filter: lineMain.filter || false
           }
 
           const line = d3.line()
@@ -109,6 +112,21 @@ export class AD3 {
             .attr('stroke', lineOptions.color)
             .attr('stroke-width', lineOptions.width)
             .attr('d', line)
+
+          if (lineOptions.filter) {
+            let filterOption: GenerateFilterOptions = {} as GenerateFilterOptions
+
+            if (typeof lineOptions.filter === 'string') {
+              filterOption.type = lineOptions.filter
+            } else {
+              filterOption = lineOptions.filter
+            }
+
+            const filter = generateFilter(filterOption)
+
+            ctxCall(filter)
+            path.attr('filter', 'url(#drop-shadow)')
+          }
 
           // Animation path view
           let length = path.node().getTotalLength()
