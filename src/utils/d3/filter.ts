@@ -1,4 +1,4 @@
-type FilterTypes = 'drop-shadow' | 'blur'
+type FilterTypes = 'drop-shadow' | 'drop-shadow-native' | 'blur'
 
 export interface GenerateFilterOptions {
   type: FilterTypes
@@ -20,22 +20,51 @@ export function generateFilter(options: GenerateFilterOptions) {
   }
 
   const filter = (g: any) => {
-    if (type === 'drop-shadow') {
-      g.append('defs')
-        .append('filter')
-        .attr('id', 'drop-shadow')
-        .append('feDropShadow')
-        .attr('dy', y)
-        .attr('dx', x)
-        .attr('stdDeviation', blur)
-        .attr('flood-color', color)
-        .attr('flood-opacity', opacity)
-    } else if (type === 'blur') {
-      g.append('defs')
-        .append('filter')
-        .attr('id', 'blur')
-        .append('feGaussianBlur')
-        .attr('stdDeviation', blur)
+    switch (type) {
+      case 'drop-shadow': {
+        const filter = g.append('defs')
+          .append('filter')
+          .attr('id', 'drop-shadow')
+
+        filter
+          .append('feGaussianBlur')
+          .attr('in', 'SourceAlpha')
+          .attr('stdDeviation', blur)
+
+        filter
+          .append('feOffset')
+          .attr('dy', y)
+          .attr('dx', x)
+
+        const merge = filter
+          .append('feMerge')
+
+        merge
+          .append('feMergeNode')
+
+        merge
+          .append('feMergeNode')
+          .attr('in', 'SourceGraphic')
+        break
+      }
+      case 'drop-shadow-native':
+        g.append('defs')
+          .append('filter')
+          .attr('id', 'drop-shadow-native')
+          .append('feDropShadow')
+          .attr('dy', y)
+          .attr('dx', x)
+          .attr('stdDeviation', blur)
+          .attr('flood-color', color)
+          .attr('flood-opacity', opacity)
+        break
+      case 'blur':
+        g.append('defs')
+          .append('filter')
+          .attr('id', 'blur')
+          .append('feGaussianBlur')
+          .attr('stdDeviation', blur)
+        break
     }
   }
 
