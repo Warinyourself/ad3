@@ -20,17 +20,23 @@ export function generateFilter(options: GenerateFilterOptions) {
   }
 
   const filter = (g: any) => {
-    const filter = g
-      .append('defs')
-      .append('filter')
-      .attr('id', 'drop-shadow')
-      .append('feDropShadow')
-      .attr('dy', y)
-      .attr('dx', x)
-      .attr('stdDeviation', blur)
-      .attr('flood-color', color)
-      .attr('flood-opacity', opacity)
-    console.log({ filter })
+    if (type === 'drop-shadow') {
+      g.append('defs')
+        .append('filter')
+        .attr('id', 'drop-shadow')
+        .append('feDropShadow')
+        .attr('dy', y)
+        .attr('dx', x)
+        .attr('stdDeviation', blur)
+        .attr('flood-color', color)
+        .attr('flood-opacity', opacity)
+    } else if (type === 'blur') {
+      g.append('defs')
+        .append('filter')
+        .attr('id', 'blur')
+        .append('feGaussianBlur')
+        .attr('stdDeviation', blur)
+    }
   }
 
   return filter

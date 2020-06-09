@@ -28,7 +28,7 @@ export default class ChartPage extends Vue {
             color: 'var(--color-second)',
             width: 4,
             curve: 'curveStepAfter',
-            filter: 'drop-shadow'
+            filter: 'blur'
           },
           {
             color: 'var(--color-third)',

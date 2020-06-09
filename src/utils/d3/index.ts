@@ -125,7 +125,7 @@ export class AD3 {
             const filter = generateFilter(filterOption)
 
             ctxCall(filter)
-            path.attr('filter', 'url(#drop-shadow)')
+            path.attr('filter', `url(#${filterOption.type})`)
           }
 
           // Animation path view
