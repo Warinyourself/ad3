@@ -3,6 +3,8 @@ import store from '@/store'
 import { IWidgetBlock, IWidgetBlockGeneralSettings } from '@/types'
 import { UtilsModule } from '@/store/utils/UtilsModule'
 
+import { generateData } from '@/utils/d3'
+
 export interface SettingsState {
   widgetBlocks: Array<IWidgetBlock>
 }
@@ -32,7 +34,29 @@ class Settings extends VuexModule implements SettingsState {
       title: 'Chart widget',
       component: 'LineWidget',
       size: [3, 1],
-      url: '/chart'
+      url: '/chart',
+      chartSettings: {
+        data: generateData({ max: 12, sets: 3 }),
+        options: {
+          grid: true,
+          line: [
+            {
+              color: 'var(--color-second)',
+              width: 4,
+              curve: 'curveStepAfter',
+              filter: 'blur'
+            },
+            {
+              color: 'var(--color-third)',
+              width: 3,
+              filter: {
+                type: 'drop-shadow',
+                color: 'var(--color-third)'
+              }
+            }
+          ]
+        }
+      }
     },
     {
       id: UtilsModule.getUUID(),

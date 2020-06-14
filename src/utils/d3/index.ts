@@ -41,7 +41,7 @@ interface ConstructorAD3 {
 export class AD3 {
   constructor(ctx: any, settings: ConstructorAD3) {
     const ctxCall = (func: (g: any) => any) => ctx.append('g').call(func)
-    const { type, data, options } = settings
+    let { type, data, options } = settings
     let [width, height] = [ctx.clientWidth, ctx.clientHeight]
     let margin = { top: 10, right: 10, bottom: 10, left: 10 }
     let grid
@@ -60,8 +60,6 @@ export class AD3 {
 
     if (type === 'line') {
       const isDeepStructure = Array.isArray(data[0])
-
-      // console.log({ isDeepStructure, data, width, height, margin, ctx })
 
       const dataLength = isDeepStructure ? data[0].length : data.length
       const [x, xAxis] = generateAxis({
@@ -90,66 +88,46 @@ export class AD3 {
         ctxCall(gridCall)
       }
 
-      if (isDeepStructure) {
-        data.forEach((element: any, i: number) => {
-          const isSeveralLines = Array.isArray(options?.line)
-          const lineMain: LineOption = isSeveralLines ? (options?.line as LineOption[])[i] || {} : (options?.line as LineOption) || {}
-          const lineOptions = {
-            color: lineMain.color || 'var(--color-active)',
-            width: lineMain.width || 1.5,
-            curve: lineMain.curve || 'curveCardinal',
-            filter: lineMain.filter || false
-          }
+      if (!isDeepStructure) {
+        data = [data]
+      }
 
-          const line = d3.line()
-            .x((_, i) => x(i))
-            .y((d: any) => y(d.value))
-            .curve(d3[lineOptions.curve])
+      data.forEach((element: any, i: number) => {
+        const isSeveralLines = Array.isArray(options?.line)
+        const lineMain: LineOption = isSeveralLines ? (options?.line as LineOption[])[i] || {} : (options?.line as LineOption) || {}
+        const lineOptions = {
+          color: lineMain.color || 'var(--color-active)',
+          width: lineMain.width || 1.5,
+          curve: lineMain.curve || 'curveCardinal',
+          filter: lineMain.filter || false
+        }
 
-          const path = ctx.append('path')
-            .datum(element)
-            .attr('fill', 'none')
-            .attr('stroke', lineOptions.color)
-            .attr('stroke-width', lineOptions.width)
-            .attr('d', line)
-
-          if (lineOptions.filter) {
-            let filterOption: GenerateFilterOptions = {} as GenerateFilterOptions
-
-            if (typeof lineOptions.filter === 'string') {
-              filterOption.type = lineOptions.filter
-            } else {
-              filterOption = lineOptions.filter
-            }
-
-            const filter = generateFilter(filterOption)
-
-            ctxCall(filter)
-            path.attr('filter', `url(#${filterOption.type})`)
-          }
-
-          // Animation path view
-          let length = path.node().getTotalLength()
-
-          path.attr('stroke-dasharray', length + ' ' + length)
-            .attr('stroke-dashoffset', length)
-            .transition()
-            .ease(d3.easeLinear)
-            .attr('stroke-dashoffset', 0)
-            .duration(2000)
-        })
-      } else {
         const line = d3.line()
           .x((_, i) => x(i))
           .y((d: any) => y(d.value))
-          .curve(d3.curveCardinal)
+          .curve(d3[lineOptions.curve])
 
         const path = ctx.append('path')
-          .datum(data)
+          .datum(element)
           .attr('fill', 'none')
-          .attr('stroke', 'var(--color-active)')
-          .attr('stroke-width', 1.5)
+          .attr('stroke', lineOptions.color)
+          .attr('stroke-width', lineOptions.width)
           .attr('d', line)
+
+        if (lineOptions.filter) {
+          let filterOption: GenerateFilterOptions = {} as GenerateFilterOptions
+
+          if (typeof lineOptions.filter === 'string') {
+            filterOption.type = lineOptions.filter
+          } else {
+            filterOption = lineOptions.filter
+          }
+
+          const filter = generateFilter(filterOption)
+
+          ctxCall(filter)
+          path.attr('filter', `url(#${filterOption.type})`)
+        }
 
         // Animation path view
         let length = path.node().getTotalLength()
@@ -160,7 +138,7 @@ export class AD3 {
           .ease(d3.easeLinear)
           .attr('stroke-dashoffset', 0)
           .duration(2000)
-      }
+      })
 
       const { lineY, lineX, picker: pickerGroup, animate } = generateTooltip({ width, height, margin })
       let marker = {}

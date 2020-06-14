@@ -1,11 +1,11 @@
-interface IAminate {
+interface AninateOptions {
   duration: number
   timing: (time: number) => number
   draw: (progress: number) => void
   complete?: Function
 }
 
-export function animate(options: IAminate) {
+export function animate(options: AninateOptions) {
   const start = performance.now()
 
   requestAnimationFrame(function animate(time) {
